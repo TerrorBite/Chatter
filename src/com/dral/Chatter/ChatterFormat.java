@@ -68,11 +68,48 @@ public class ChatterFormat {
         return out.toString().trim();
     }
 
+    String convertColors(String str) {
+        Pattern color_codes = Pattern.compile("&([0-9A-Fa-f])");
+        Matcher find_colors = color_codes.matcher(str);
+        while (find_colors.find()) {
+            str = find_colors.replaceFirst("\u00A7" + find_colors.group(1));
+            find_colors = color_codes.matcher(str);
+        }
+        return str;
+    }
+
     private String star(String word) {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < word.length(); i++)
             out.append("*");
         return out.toString();
+    }
+
+
+    public String parseName(Player player, String nameFormat) {
+        String level = String.valueOf(player.getLevel());
+        String group = Chatter.allInOne.getGroup(player);
+        String healthbar = healthBar(player);
+        String health = String.valueOf(player.getHealth());
+
+
+        String factiontag = "nofactionsplugin:(";
+        if (Chatter.factionisEnabled) {
+            factiontag = Chatter.factionpluginthing.getPlayerFactionTag(player);
+        }
+
+
+        String format = parseVars(nameFormat, player);
+        if (format == null) return player.getName();
+        String[] search = new String[]{"+xplevel", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+name,+n", "+displayname,+d"};
+        String[] replace = new String[]{level, factiontag, group, healthbar, health, player.getName(), player.getDisplayName()};
+        String name = convertColors(replaceVars(format, search, replace));
+        if (name.length() > 18) {
+            return name.substring(0, 14) + "..";
+        } else {
+            return name;
+        }
+
     }
 
     public String parseChat(Player player, String msg, String chatFormat) {
@@ -95,20 +132,21 @@ public class ChatterFormat {
         if (format == null) return msg;
 
         String factiontag = "nofactionsplugin:(";
-        if (Chatter.factionisEnabled == true) {
+        if (Chatter.factionisEnabled) {
             factiontag = Chatter.factionpluginthing.getPlayerFactionTag(player);
         }
 
         String mvalias = "multiverse?!";
         String mvcolor = "multiverse?";
-        if (Chatter.multiverseisEnabled == true) {
+        if (Chatter.multiverseisEnabled) {
             mvalias = Chatter.multiversepluginthing.getMVWorldManager().getMVWorld(player.getWorld()).getColoredWorldString();
+            if (mvalias.isEmpty()) mvalias = player.getWorld().getName();
         }
 
         // Order is important, this allows us to use all variables in the suffix and prefix! But no variables in the message
         String[] search = new String[]{"mvcolor", "+mvalias", "+xplevel", "+gamemode,+gm", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+world,+w", "+time,+t", "+name,+n", "+displayname,+d", "+message,+m"};
         String[] replace = new String[]{mvcolor, mvalias, level, gMode, factiontag, group, healthbar, health, world, time, player.getName(), player.getDisplayName(), msg};
-        return replaceVars(format, search, replace);
+        return convertColors(replaceVars(format, search, replace));
     }
 
     public String parseChat(Player p, String msg) {

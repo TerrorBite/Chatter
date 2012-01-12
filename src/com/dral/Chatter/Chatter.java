@@ -63,7 +63,7 @@ public class Chatter extends JavaPlugin {
     public InfoReader bInfoR;
     Boolean bPermB;
 
-    private PluginManager pm;
+    PluginManager pm;
     Configuration config;
     Configuration groups;
 
@@ -87,10 +87,10 @@ public class Chatter extends JavaPlugin {
     String latestChat = "";
     long latestChatSecond = 0;
 
-    private ChatterPlayerListener pListener = new ChatterPlayerListener(this);
+    private final ChatterPlayerListener pListener = new ChatterPlayerListener(this);
     public ChatterFormat format = new ChatterFormat(this);
     private ChatterConfigThing configThing = new ChatterConfigThing(this);
-    public ChatterPermissionsHandler allInOne = new ChatterPermissionsHandler(this);
+    public final ChatterPermissionsHandler allInOne = new ChatterPermissionsHandler(this);
     //private ChatterConfigThong configThong;
 
     public void onEnable() {
@@ -129,8 +129,9 @@ public class Chatter extends JavaPlugin {
         // Register events
         pm.registerEvent(Event.Type.PLAYER_CHAT, pListener, Event.Priority.Highest, this);
         pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, pListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_JOIN, pListener, Event.Priority.Highest, this);
 
-        log.info("Chatter loaded correctly! let's do this!");
+        logIt("Chatter loaded correctly! let's do this!");
     }
 
     public void onDisable() {
@@ -139,7 +140,7 @@ public class Chatter extends JavaPlugin {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("reloadchatter")) {
-            if (allInOne.checkPermissions((Player) sender, "chatter.reload", true)) {
+            if (allInOne.checkPermissions((Player) sender, "chatter.reload")) {
                 configThing.loadConfig();
                 sender.sendMessage("[Chatter] chatter reloaded :)");
             }
@@ -158,7 +159,7 @@ public class Chatter extends JavaPlugin {
         if (permissionsPluginTest != null) {
             pexPermissions = PermissionsEx.getPermissionManager();
             PEXB = true;
-            log.info("Found PEX <3");
+            logIt("Found PEX <3");
             return;
         }
 
@@ -167,7 +168,7 @@ public class Chatter extends JavaPlugin {
             bPermB = true;
             bInfoR = de.bananaco.permissions.Permissions.getInfoReader();
             bPermS = de.bananaco.permissions.Permissions.getWorldPermissionsManager();
-            log.info("bPermissions found :D using it now");
+            logIt("bPermissions found :D using it now");
             return;
         }
 
@@ -176,20 +177,18 @@ public class Chatter extends JavaPlugin {
             permissions = ((Permissions) permissionsPluginTest).getHandler();
             permissionsB = true;
             permissions3 = permissionsPluginTest.getDescription().getVersion().startsWith("3");
-            log.info("found permissions3, my day is good :D");
+            logIt("found permissions3, my day is good :D");
             return;
         }
 
         permissionsPluginTest = getServer().getPluginManager().getPlugin("GroupManager");
         if (permissionsPluginTest != null) {
             gmPermissionsB = true;
-            log.info("you have groupmanager? you have essentials!! shame on you :P");
+            logIt("you have groupmanager? you have essentials!! shame on you :P");
             return;
         }
 
-        log.severe("no proper permissions system found, more to come in the future");
-        log.severe("disabling for now :(");
-        pm.disablePlugin(this);
+        logIt("no proper permissions system found, more to come in the future");
     }
 
     public void logIt(String message) {

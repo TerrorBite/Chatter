@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class ChatterPhoneHome implements Runnable {
+class ChatterPhoneHome implements Runnable {
     private Chatter plugin;
     private int pub = 1;
 
@@ -17,7 +17,8 @@ public class ChatterPhoneHome implements Runnable {
 
     public void run() {
         try {
-            if (postUrl().contains("Success")) return;
+            if (postUrl().contains("Success")) {
+            }
         } catch (Exception ignored) {
         }
     }

@@ -104,8 +104,8 @@ public class ChatterFormat {
         String[] search = new String[]{"+xplevel", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+name,+n", "+displayname,+d"};
         String[] replace = new String[]{level, factiontag, group, healthbar, health, player.getName(), player.getDisplayName()};
         String name = convertColors(replaceVars(format, search, replace));
-        if (name.length() > 18) {
-            return name.substring(0, 14) + "..";
+        if (name.length() > 16) {
+            return name.substring(0, 12) + "..\u00A7F";
         } else {
             return name;
         }

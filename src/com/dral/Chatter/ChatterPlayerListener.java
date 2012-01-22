@@ -41,7 +41,14 @@ public class ChatterPlayerListener extends PlayerListener {
         String msg = event.getMessage();
         String format = Chatter.format.parseChat(player, msg) + " ";
         String name = Chatter.format.parseName(player, Chatter.nameFormat);
-        player.setPlayerListName(name);
+        if (Chatter.playerlist) {
+            try {
+                player.setPlayerListName(name);
+            } catch (IllegalArgumentException e) {
+                System.out.println("[Chatter] Name-format results in non-unique name. Defaulting to Registered Name");
+                player.setPlayerListName(player.getName());
+            }
+        }
 
         if (Chatter.spoutisEnabled) {
             SpoutManager.getAppearanceManager().setGlobalTitle(player, name);
@@ -68,7 +75,14 @@ public class ChatterPlayerListener extends PlayerListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String name = Chatter.format.parseName(player, Chatter.nameFormat);
-        player.setPlayerListName(name);
+        if (Chatter.playerlist) {
+            try {
+                player.setPlayerListName(name);
+            } catch (IllegalArgumentException e) {
+                System.out.println("[Chatter] Name-format too long or results in non-unique name. Defaulting to Registered Name");
+                player.setPlayerListName(player.getName());
+            }
+        }
 
         if (Chatter.spoutisEnabled) {
             SpoutManager.getAppearanceManager().setGlobalTitle(player, name);

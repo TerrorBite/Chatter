@@ -1,7 +1,7 @@
 name: Chatter
 main: com.dral.Chatter.Chatter
 version: 2.1.9
-author: Dral
+author: [Dral, Tatara88]
 website: http://twitter.com/dralletje
 commands:
     reloadchatter:
@@ -10,3 +10,10 @@ commands:
     chatter:
         description: just nothing :P
         usage: /chatter
+permissions:
+  chatter.reload:
+    description: Allows you to use the '/reloadchatter' command.
+  chatter.colors:
+    description: Allows people to use colors in chat.
+  chatter.k:
+    description: Only give this to cool people, cuze this will freeze everyone!

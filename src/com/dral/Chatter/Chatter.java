@@ -20,6 +20,9 @@ package com.dral.Chatter;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.ensifera.animosity.craftirc.CraftIRC;
+import com.ensifera.animosity.craftirc.EndPoint;
+import com.ensifera.animosity.craftirc.RelayedMessage;
 import com.massivecraft.factions.P;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -44,7 +47,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class Chatter extends JavaPlugin {
+public class Chatter extends JavaPlugin implements EndPoint {
+
+    public CraftIRC craftirchandler;
     private static final Logger log = Logger.getLogger("Minecraft");
     public Server server;
 
@@ -84,6 +89,7 @@ public class Chatter extends JavaPlugin {
     public boolean multiverseisEnabled = false;
     public SpoutManager spoutpluginthing;
     public boolean spoutisEnabled = false;
+    public boolean craftircenabled = false;
 
     String latestChat = "";
     long latestChatSecond = 0;
@@ -117,6 +123,23 @@ public class Chatter extends JavaPlugin {
         if (spoutTest != null) {
             this.spoutisEnabled = true;
         }
+
+        Plugin craftirc = getServer().getPluginManager().getPlugin("CraftIRC");
+        if (craftirc != null) {
+            this.craftircenabled = true;
+            try {
+                craftirchandler = (CraftIRC) craftirc;
+                craftirchandler.registerEndPoint("Chatter", this);
+                RelayedMessage rm = craftirchandler.newMsg(this, null, "generic");
+                rm.setField("message", "I'm aliiive!");
+                rm.post();
+            } catch (ClassCastException ex) {
+                ex.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
         setupPermissions();
 
@@ -202,5 +225,30 @@ public class Chatter extends JavaPlugin {
             log.info("[Chatter] " + message);
         else
             logIt(message);
+    }
+
+    public Type getType() {
+        return EndPoint.Type.MINECRAFT;
+    }
+
+    public void messageIn(RelayedMessage msg) {
+        if (msg.getEvent() == "join")
+            getServer().broadcastMessage(msg.getField("sender") + " joined the game!");
+    }
+
+    public boolean userMessageIn(String username, RelayedMessage msg) {
+        return false;
+    }
+
+    public boolean adminMessageIn(RelayedMessage msg) {
+        return false;
+    }
+
+    public List<String> listUsers() {
+        return null;
+    }
+
+    public List<String> listDisplayUsers() {
+        return null;
     }
 }

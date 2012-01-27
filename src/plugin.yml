@@ -1,6 +1,6 @@
 name: Chatter
 main: com.dral.Chatter.Chatter
-version: 2.1.9
+version: 2.2.0
 author: Dral
 website: http://twitter.com/dralletje
 commands:
@@ -10,3 +10,4 @@ commands:
     chatter:
         description: just nothing :P
         usage: /chatter
+softdepend: [CraftIRC]

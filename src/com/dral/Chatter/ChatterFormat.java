@@ -69,7 +69,7 @@ public class ChatterFormat {
     }
 
     String convertColors(String str) {
-        Pattern color_codes = Pattern.compile("&([0-9A-Fa-f])");
+        Pattern color_codes = Pattern.compile("&([0-9A-Fa-fkK])");
         Matcher find_colors = color_codes.matcher(str);
         while (find_colors.find()) {
             str = find_colors.replaceFirst("\u00A7" + find_colors.group(1));
@@ -103,7 +103,7 @@ public class ChatterFormat {
         if (format == null) return player.getName();
         String[] search = new String[]{"+xplevel", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+name,+n", "+displayname,+d"};
         String[] replace = new String[]{level, factiontag, group, healthbar, health, player.getName(), player.getDisplayName()};
-        String name = convertColors(replaceVars(format, search, replace));
+        String name = convertColors(replaceVars(format, search, replace)) + "\u00A7F";
         if (name.length() > 16) {
             return name.substring(0, 12) + "..\u00A7F";
         } else {

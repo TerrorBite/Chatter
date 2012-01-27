@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Bukkit"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Multiverse"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/CraftBukkit"/>
+	<classpathentry kind="var" path="USER_HOME/Bukkit/CraftIRC-3.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

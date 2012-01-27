@@ -18,6 +18,7 @@ package com.dral.Chatter;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.ensifera.animosity.craftirc.RelayedMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -33,6 +34,7 @@ public class ChatterPlayerListener extends PlayerListener {
         this.Chatter = Chatter;
     }
 
+
     @Override
     public void onPlayerChat(PlayerChatEvent event) {
         if (event.isCancelled()) return;
@@ -41,6 +43,14 @@ public class ChatterPlayerListener extends PlayerListener {
         String msg = event.getMessage();
         String format = Chatter.format.parseChat(player, msg) + " ";
         String name = Chatter.format.parseName(player, Chatter.nameFormat);
+        String ircname = Chatter.format.parseChat(player, "", Chatter.nameFormat);
+
+        if (Chatter.craftircenabled) {
+            RelayedMessage rm = Chatter.craftirchandler.newMsg(Chatter, null, "chat");
+            rm.setField("message", msg);
+            rm.setField("sender", ircname);
+            rm.post();
+        }
         if (Chatter.playerlist) {
             try {
                 player.setPlayerListName(name);
@@ -104,6 +114,12 @@ public class ChatterPlayerListener extends PlayerListener {
             for (int i = 0; i < messages.length; i++) {
                 String messageThing = messages[i];
                 Chatter.server.broadcastMessage(messageThing);
+            }
+            if (Chatter.craftircenabled) {
+                RelayedMessage rm = Chatter.craftirchandler.newMsg(Chatter, null, "action");
+                rm.setField("message", s);
+                rm.setField("sender", ChatColor.stripColor(player.getDisplayName()));
+                rm.post();
             }
             event.setCancelled(true);
         }

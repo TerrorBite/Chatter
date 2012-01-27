@@ -26,7 +26,7 @@ public class BetterChatWrapper {
     private static final int CHAT_WINDOW_WIDTH = 320;
     private static final int CHAT_STRING_LENGTH = 119;
 
-    public static String[] wrapText(final String text) {
+    public static String[] wrapText(final String text, boolean CanHasColor) {
         final StringBuilder out = new StringBuilder();
         char colorChar = 'f';
         int lineWidth = 0;
@@ -116,5 +116,16 @@ public class BetterChatWrapper {
 
         // Return it split
         return out.toString().split("\n");
+    }
+    
+    public static String[] wrapText(String text) {
+        wrapText(text, false);
+    }
+    
+    public static String[] wrapText(String text. Player player) {
+        if (player.hasPermission("chatter.colors")) {}
+            wrapText(text, true);
+        else
+            wrapText(text, false); 
     }
 }

@@ -37,7 +37,9 @@ public class ChatterPlayerListener extends PlayerListener {
 
     @Override
     public void onPlayerChat(PlayerChatEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled()) {
+            return;
+        }
 
         Player player = event.getPlayer();
         String msg = event.getMessage();
@@ -67,8 +69,7 @@ public class ChatterPlayerListener extends PlayerListener {
         if (Chatter.textwrapping) {
             event.setFormat(format);
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
-            for (int i = 0; i < messages.length; i++) {
-                String message = messages[i];
+            for (String message : messages) {
                 Player[] players = Chatter.server.getOnlinePlayers();
                 for (Player playertemp : players) {
                     playertemp.sendMessage(message);
@@ -102,17 +103,18 @@ public class ChatterPlayerListener extends PlayerListener {
     // Use CommandPreprocess because that's what Justin said.
     @Override
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled()) {
+            return;
+        }
 
         Player player = event.getPlayer();
         String message = event.getMessage();
 
         if (message.toLowerCase().startsWith("/me ")) {
-            String s = message.substring(message.indexOf(" ")).trim();
+            String s = message.substring(message.indexOf(' ')).trim();
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, s, Chatter.meFormat) + " ");
 
-            for (int i = 0; i < messages.length; i++) {
-                String messageThing = messages[i];
+            for (String messageThing : messages) {
                 Chatter.server.broadcastMessage(messageThing);
             }
             if (Chatter.craftircenabled) {

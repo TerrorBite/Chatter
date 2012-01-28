@@ -1,11 +1,6 @@
 package com.dral.Chatter;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-
-class ChatterPhoneHome implements Runnable {
+/*class ChatterPhoneHome implements Runnable {
     private Chatter plugin;
     private int pub = 1;
 
@@ -41,4 +36,4 @@ class ChatterPhoneHome implements Runnable {
             result += inputLine;
         return result;
     }
-}
+}*/

@@ -1,5 +1,7 @@
 package com.dral.Chatter;
 
+import org.bukkit.entity.Player;
+
 public class BetterChatWrapper {
     private static final int[] characterWidths = new int[]{
             1, 9, 9, 8, 8, 8, 8, 7, 9, 8, 9, 9, 8, 9, 9, 9,
@@ -57,8 +59,11 @@ public class BetterChatWrapper {
 
             // Figure out if it's allowed, else skip it or do something :/
             int index = allowedChars.indexOf(ch);
-            if (index == -1) continue;
-            else index += 32;
+            if (index == -1) {
+                continue;
+            } else {
+                index += 32;
+            }
 
             // Find the width
             final int width = characterWidths[index];
@@ -103,8 +108,9 @@ public class BetterChatWrapper {
             }
 
             //if the line is not to long or to big, set the place to return to, to current.
-            if (lineLength < CHAT_STRING_LENGTH && lineWidth < CHAT_WINDOW_WIDTH)
+            if (lineLength < CHAT_STRING_LENGTH && lineWidth < CHAT_WINDOW_WIDTH) {
                 lineIsGood = i;
+            }
 
             //add the current with + length to the global ones, and add the char to the string.
             out.append(ch);
@@ -117,15 +123,16 @@ public class BetterChatWrapper {
         // Return it split
         return out.toString().split("\n");
     }
-    
+
     public static String[] wrapText(String text) {
-        wrapText(text, false);
+        return wrapText(text, false);
     }
-    
-    public static String[] wrapText(String text. Player player) {
-        if (player.hasPermission("chatter.colors")) {}
-            wrapText(text, true);
-        else
-            wrapText(text, false); 
+
+    public static String[] wrapText(String text, Player player) {
+        if (player.hasPermission("chatter.colors")) {
+            return wrapText(text, true);
+        } else {
+            return wrapText(text, false);
+        }
     }
 }

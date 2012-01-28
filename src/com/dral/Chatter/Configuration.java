@@ -36,8 +36,9 @@ public class Configuration extends YamlConfiguration {
 
     public Configuration(File file) {
         super();
-        if (file == null)
+        if (file == null) {
             System.err.println("File should not be null!");
+        }
         this.file = file;
     }
 
@@ -45,12 +46,14 @@ public class Configuration extends YamlConfiguration {
         try {
             // First do checks to create the initial file
             if (!file.exists()) {
-                if (file.getParentFile() != null)
+                if (file.getParentFile() != null) {
                     file.getParentFile().mkdirs();
-                if (file.createNewFile())
+                }
+                if (file.createNewFile()) {
                     super.save(file);
-                else
+                } else {
                     throw new Exception("Cannot load: File can not be created!");
+                }
             }
             // Then do checks to save the file
             super.load(file);
@@ -62,14 +65,17 @@ public class Configuration extends YamlConfiguration {
     public void save() {
         try {
             if (!file.exists()) {
-                if (file.getParentFile() != null)
+                if (file.getParentFile() != null) {
                     file.getParentFile().mkdirs();
-                if (file.createNewFile())
+                }
+                if (file.createNewFile()) {
                     super.save(file);
-                else
+                } else {
                     throw new Exception("Cannot save: File can not be created!");
-            } else
+                }
+            } else {
                 super.save(file);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,9 +84,11 @@ public class Configuration extends YamlConfiguration {
     public List<String> getKeys() {
         Set<String> keys = super.getKeys(false);
         List<String> lkeys = new ArrayList<String>();
-        if (keys != null)
-            for (String key : keys)
+        if (keys != null) {
+            for (String key : keys) {
                 lkeys.add(key);
+            }
+        }
         return lkeys;
     }
 
@@ -88,14 +96,17 @@ public class Configuration extends YamlConfiguration {
         List<String> lkeys = new ArrayList<String>();
         ConfigurationSection cs = super.getConfigurationSection(path);
 
-        if (cs == null)
+        if (cs == null) {
             return lkeys;
+        }
 
         Set<String> keys = cs.getKeys(false);
 
-        if (keys != null)
-            for (String key : keys)
+        if (keys != null) {
+            for (String key : keys) {
                 lkeys.add(key);
+            }
+        }
         return lkeys;
     }
 
@@ -112,17 +123,19 @@ public class Configuration extends YamlConfiguration {
     public void removeProperty(String path) {
         try {
             super.set(path, null);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
     public List<String> getStringList(String path, List<String> def) {
-        if (def == null)
+        if (def == null) {
             def = new ArrayList<String>();
+        }
 
         List<?> list = super.getList(path, def);
-        if (list == null)
+        if (list == null) {
             return def;
+        }
         try {
             @SuppressWarnings("unchecked")
             List<String> sList = (List<String>) list;

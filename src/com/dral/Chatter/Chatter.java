@@ -216,15 +216,17 @@ public class Chatter extends JavaPlugin implements EndPoint {
     }
 
     public void logIt(String message) {
-        if (logEverything == true)
+        if (logEverything) {
             log.info("[Chatter] " + message);
+        }
     }
 
     public void logIt(String message, boolean loganyway) {
-        if (loganyway)
+        if (loganyway) {
             log.info("[Chatter] " + message);
-        else
+        } else {
             logIt(message);
+        }
     }
 
     public Type getType() {
@@ -232,8 +234,9 @@ public class Chatter extends JavaPlugin implements EndPoint {
     }
 
     public void messageIn(RelayedMessage msg) {
-        if (msg.getEvent() == "join")
+        if (msg.getEvent().equals("join")) {
             getServer().broadcastMessage(msg.getField("sender") + " joined the game!");
+        }
     }
 
     public boolean userMessageIn(String username, RelayedMessage msg) {

@@ -19,6 +19,7 @@ package com.dral.Chatter;
  */
 
 import com.ensifera.animosity.craftirc.RelayedMessage;
+import com.feildmaster.channelchat.channel.Channel;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -37,10 +38,6 @@ public class ChatterPlayerListener extends PlayerListener {
 
     @Override
     public void onPlayerChat(PlayerChatEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         Player player = event.getPlayer();
         String msg = event.getMessage();
         String format = Chatter.format.parseChat(player, msg) + " ";
@@ -66,19 +63,24 @@ public class ChatterPlayerListener extends PlayerListener {
             SpoutManager.getAppearanceManager().setGlobalTitle(player, name);
         }
 
+        if (Chatter.channelisenabled) {
+            Channel channel = Chatter.channelManager.getChannel(event);
+            Chatter.channelManager.sendMessage(player, channel, msg);
+        }
+
         if (Chatter.textwrapping) {
             event.setFormat(format);
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
-            for (String message : messages) {
-                Player[] players = Chatter.server.getOnlinePlayers();
-                for (Player playertemp : players) {
-                    playertemp.sendMessage(message);
-                }
+            for (int i = 0; i < messages.length; i++) {
+                String message = messages[i];
+                Chatter.server.broadcastMessage(message);
             }
             event.setCancelled(true);
         } else {
             event.setFormat(format);
         }
+
+
         System.out.println(ChatColor.stripColor(format));
     }
 

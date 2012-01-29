@@ -23,6 +23,7 @@ package com.dral.Chatter;
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
+import com.feildmaster.channelchat.channel.ChannelManager;
 import com.massivecraft.factions.P;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -52,6 +53,7 @@ public class Chatter extends JavaPlugin implements EndPoint {
     public CraftIRC craftirchandler;
     private static final Logger log = Logger.getLogger("Minecraft");
     public Server server;
+    public ChannelManager channelManager;
 
     // Permissions
     public PermissionHandler permissions;
@@ -90,6 +92,7 @@ public class Chatter extends JavaPlugin implements EndPoint {
     public SpoutManager spoutpluginthing;
     public boolean spoutisEnabled = false;
     public boolean craftircenabled = false;
+    public boolean channelisenabled = false;
 
     String latestChat = "";
     long latestChatSecond = 0;
@@ -138,6 +141,10 @@ public class Chatter extends JavaPlugin implements EndPoint {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        Plugin channelTest = getServer().getPluginManager().getPlugin("ChannelChat");
+        if (channelTest != null) {
+            this.channelisenabled = true;
         }
 
 

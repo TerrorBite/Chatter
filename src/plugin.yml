@@ -1,7 +1,7 @@
 name: Chatter
 main: com.dral.Chatter.Chatter
 version: 2.2.0
-author: [Dral, Tatara88]
+authors: [Dral, Tatara88]
 website: http://twitter.com/dralletje
 commands:
     reloadchatter:

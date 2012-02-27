@@ -70,7 +70,7 @@ public class ChatterPlayerListener extends PlayerListener {
             event.setFormat(format);
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
             for (String message : messages) {
-                Player[] players = Chatter.server.getOnlinePlayers();
+                Player[] players = event.getRecipients();
                 for (Player playertemp : players) {
                     playertemp.sendMessage(message);
                 }

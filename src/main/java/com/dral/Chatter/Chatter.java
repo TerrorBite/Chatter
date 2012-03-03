@@ -40,7 +40,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,16 +77,14 @@ public class Chatter extends JavaPlugin implements EndPoint {
     public boolean factionisEnabled = false;
     public Core multiversepluginthing;
     public boolean multiverseisEnabled = false;
-    public SpoutManager spoutpluginthing;
+    public SpoutPlayer spoutpluginthing;
     public boolean spoutisEnabled = false;
     public boolean craftircenabled = false;
 
-    String latestChat = "";
-    long latestChatSecond = 0;
-
     public ChatterFormat format = new ChatterFormat(this);
     private ChatterConfigThing configThing = new ChatterConfigThing(this);
-    public final ChatterPermissionsHandler allInOne = new ChatterPermissionsHandler(this);
+    private ChatterPlayerListener pListener = new ChatterPlayerListener(this);
+    public final ChatterPermissionsHandler permhandler = new ChatterPermissionsHandler(this);
     //private ChatterConfigThong configThong;
 
     public void onEnable() {
@@ -128,7 +126,7 @@ public class Chatter extends JavaPlugin implements EndPoint {
                 e.printStackTrace();
             }
         }
-        pm.registerEvents(new ChatterPlayerListener(), this);
+        pm.registerEvents(pListener, this);
 
         setupPermissions();
         setupChat();
@@ -151,7 +149,7 @@ public class Chatter extends JavaPlugin implements EndPoint {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("reloadchatter")) {
-            if (allInOne.checkPermissions((Player) sender, "chatter.reload")) {
+            if (permhandler.checkPermissions((Player) sender, "chatter.reload")) {
                 configThing.loadConfig();
                 sender.sendMessage("[Chatter] chatter reloaded :)");
             }
@@ -189,7 +187,7 @@ public class Chatter extends JavaPlugin implements EndPoint {
         }
     }
 
-    public Type getType() {
+     public Type getType() {
         return EndPoint.Type.MINECRAFT;
     }
 
@@ -214,4 +212,5 @@ public class Chatter extends JavaPlugin implements EndPoint {
     public List<String> listDisplayUsers() {
         return null;
     }
+
 }

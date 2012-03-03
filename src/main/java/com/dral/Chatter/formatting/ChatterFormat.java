@@ -21,7 +21,7 @@ public class ChatterFormat {
         Matcher m = p.matcher(format);
         StringBuffer sb = new StringBuffer();
         while (m.find()) {
-            String var = Chatter.allInOne.getInfo(player, m.group(1));
+            String var = Chatter.permhandler.getInfo(player, m.group(1));
             m.appendReplacement(sb, Matcher.quoteReplacement(var));
         }
         m.appendTail(sb);
@@ -93,7 +93,7 @@ public class ChatterFormat {
 
     public String parseName(Player player, String nameFormat) {
         String level = String.valueOf(player.getLevel());
-        String group = Chatter.allInOne.getGroup(player);
+        String group = Chatter.permhandler.getGroup(player);
         String healthbar = healthBar(player);
         String health = String.valueOf(player.getHealth());
 
@@ -122,7 +122,7 @@ public class ChatterFormat {
     public String parseChat(Player player, String msg, String chatFormat) {
         String level = String.valueOf(player.getLevel());
         String gMode = player.getGameMode().name();
-        String group = Chatter.allInOne.getGroup(player);
+        String group = Chatter.permhandler.getGroup(player);
         String healthbar = healthBar(player);
         String health = String.valueOf(player.getHealth());
         String world = player.getWorld().getName();
@@ -162,28 +162,7 @@ public class ChatterFormat {
     }
 
     public String parseChat(Player p, String msg) {
-        if ((Chatter.latestChat.equals(p.getName())) && (Chatter.latestChatSecond + 7 > System.currentTimeMillis() / 1000)) {
-            //trolololol :D
-            Chatter.latestChatSecond = System.currentTimeMillis() / 1000;
-        }
-
-        Chatter.latestChat = p.getName();
-        Chatter.latestChatSecond = System.currentTimeMillis() / 1000;
         return parseChat(p, msg, Chatter.chatFormat);
-    }
-
-    public PermissionGroup group(Player player) {
-        PermissionUser pexPlayer = Chatter.pexPermissions.getUser(player);
-        PermissionGroup bestMatch = pexPlayer.getGroups()[0];
-
-        PermissionGroup[] groups = Chatter.pexPermissions.getUser(player).getGroups(player.getWorld().getName());
-        for (int i = 1; i < groups.length; i++) {
-            int groupInGroupList = pexPlayer.getGroups()[i].getOwnOptionInteger("priority", player.getWorld().getName(), 0);
-            if (groupInGroupList > bestMatch.getOwnOptionInteger("priority", player.getWorld().getName(), 0)) {
-                bestMatch = pexPlayer.getGroups()[i];
-            }
-        }
-        return bestMatch;
     }
 
     public String healthBar(Player player) {

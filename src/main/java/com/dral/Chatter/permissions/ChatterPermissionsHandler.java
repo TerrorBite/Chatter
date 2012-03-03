@@ -22,11 +22,21 @@ public class ChatterPermissionsHandler {
         String name = player.getName();
         String world = player.getWorld().getName();
         String group = perms.getPrimaryGroup(world, name);
-        String groupstring = chatinfo.getGroupInfoString(world, group, info, true);
-        String userstring = chatinfo.getPlayerInfoString(world, name, info, false);
+        String groupstring = chatinfo.getGroupInfoString(world, group, info, null);
+        String userstring = chatinfo.getPlayerInfoString(world, name, info, null);
 
+        if (userstring != null && !userstring.isEmpty()) {
+            return userstring;
+        }
 
-        return "";
+        if (group == null) {
+            return "";
+        }
+
+        if (groupstring == null) {
+            return "";
+        }
+        return groupstring;
     }
 
     @SuppressWarnings("deprecation")

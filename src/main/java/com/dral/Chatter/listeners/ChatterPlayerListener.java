@@ -19,7 +19,7 @@ package com.dral.Chatter.listeners;
  */
 
 import com.dral.Chatter.Chatter;
-import com.dral.Chatter.formatting.BetterChatWrapper;
+import com.dral.Chatter.formatting.*;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -29,12 +29,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 public class ChatterPlayerListener implements Listener {
     Chatter Chatter;
 
-    @EventHandler (priority = EventPriority.LOWEST)
+    public ChatterPlayerListener (Chatter Chatter) {
+        this.Chatter = Chatter;
+    }
+
+
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event) {
         if (event.isCancelled()) {
             return;
@@ -62,7 +67,7 @@ public class ChatterPlayerListener implements Listener {
         }
 
         if (Chatter.spoutisEnabled) {
-            SpoutManager.getAppearanceManager().setGlobalTitle(player, name);
+            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, name);
         }
 
         if (Chatter.textwrapping) {
@@ -81,7 +86,7 @@ public class ChatterPlayerListener implements Listener {
         System.out.println(ChatColor.stripColor(format));
     }
 
-    @EventHandler (priority = EventPriority.LOWEST)
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String name = Chatter.format.parseName(player, Chatter.nameFormat);
@@ -95,7 +100,7 @@ public class ChatterPlayerListener implements Listener {
         }
 
         if (Chatter.spoutisEnabled) {
-            SpoutManager.getAppearanceManager().setGlobalTitle(player, name);
+            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, name);
         }
     }
 

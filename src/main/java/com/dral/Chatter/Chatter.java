@@ -84,7 +84,6 @@ public class Chatter extends JavaPlugin implements EndPoint {
     String latestChat = "";
     long latestChatSecond = 0;
 
-    private final ChatterPlayerListener pListener = new ChatterPlayerListener(this);
     public ChatterFormat format = new ChatterFormat(this);
     private ChatterConfigThing configThing = new ChatterConfigThing(this);
     public final ChatterPermissionsHandler allInOne = new ChatterPermissionsHandler(this);
@@ -129,6 +128,7 @@ public class Chatter extends JavaPlugin implements EndPoint {
                 e.printStackTrace();
             }
         }
+        pm.registerEvents(new ChatterPlayerListener(), this);
 
         setupPermissions();
         setupChat();

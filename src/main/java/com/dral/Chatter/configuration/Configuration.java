@@ -1,4 +1,4 @@
-package com.dral.Chatter;
+package com.dral.Chatter.configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;

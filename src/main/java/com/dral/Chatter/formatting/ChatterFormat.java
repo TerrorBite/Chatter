@@ -1,8 +1,8 @@
-package com.dral.Chatter;
+package com.dral.Chatter.formatting;
 
+import com.dral.Chatter.Chatter;
 import org.bukkit.entity.Player;
-import ru.tehkode.permissions.PermissionGroup;
-import ru.tehkode.permissions.PermissionUser;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class ChatterFormat {
     Chatter Chatter;
 
-    ChatterFormat(Chatter Chatter) {
+    public ChatterFormat(Chatter Chatter) {
         this.Chatter = Chatter;
     }
 
@@ -126,7 +126,6 @@ public class ChatterFormat {
         String healthbar = healthBar(player);
         String health = String.valueOf(player.getHealth());
         String world = player.getWorld().getName();
-        String channel = Chatter.channelManager.getActiveName(player);
 
         if (world.contains("_nether")) {
             world = Chatter.nether_name.replace("+world", world.replace("_nether", ""));
@@ -157,8 +156,8 @@ public class ChatterFormat {
         }
 
         // Order is important, this allows us to use all variables in the suffix and prefix! But no variables in the message
-        String[] search = new String[]{"mvcolor", "+mvalias", "+xplevel", "+gamemode,+gm", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+world,+w", "+time,+t", "+channel,+ch", "+name,+n", "+displayname,+d", "+message,+m"};
-        String[] replace = new String[]{mvcolor, mvalias, level, gMode, factiontag, group, healthbar, health, world, time, channel, player.getName(), player.getDisplayName(), msg};
+        String[] search = new String[]{"mvcolor", "+mvalias", "+xplevel", "+gamemode,+gm", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+world,+w", "+time,+t", "+name,+n", "+displayname,+d", "+message,+m"};
+        String[] replace = new String[]{mvcolor, mvalias, level, gMode, factiontag, group, healthbar, health, world, time, player.getName(), player.getDisplayName(), msg};
         return convertColors(replaceVars(format, search, replace));
     }
 

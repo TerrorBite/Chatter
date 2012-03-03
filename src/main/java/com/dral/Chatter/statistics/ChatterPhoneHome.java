@@ -1,4 +1,4 @@
-package com.dral.Chatter;
+package com.dral.Chatter.statistics;
 
 /*class ChatterPhoneHome implements Runnable {
     private Chatter plugin;

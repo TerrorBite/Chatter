@@ -40,7 +40,7 @@ public class ChatterPlayerListener implements Listener {
     }
 
 
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler (priority = EventPriority.LOWEST)
     public void onPlayerChat(PlayerChatEvent event) {
         if (event.isCancelled()) {
             return;

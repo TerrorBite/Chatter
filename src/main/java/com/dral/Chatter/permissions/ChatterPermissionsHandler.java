@@ -17,7 +17,7 @@ public class ChatterPermissionsHandler {
     /*
     * Info :D
     */
-    @SuppressWarnings("deprecation")
+
     public String getInfo(Player player, String info) {
         String name = player.getName();
         String world = player.getWorld().getName();
@@ -39,7 +39,7 @@ public class ChatterPermissionsHandler {
         return groupstring;
     }
 
-    @SuppressWarnings("deprecation")
+
     public String getGroup(Player player) {
         String name = player.getName();
         String world = player.getWorld().getName();

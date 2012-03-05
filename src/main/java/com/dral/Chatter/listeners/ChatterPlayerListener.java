@@ -25,9 +25,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import java.util.Set;
@@ -50,7 +49,7 @@ public class ChatterPlayerListener implements Listener {
         Player player = event.getPlayer();
         String msg = event.getMessage();
         String format = Chatter.format.parseChat(player, msg) + " ";
-        String name = Chatter.format.parseName(player, Chatter.nameFormat);
+        String listname = Chatter.format.parseName(player, Chatter.listNameFormat);
         String ircname = Chatter.format.parseChat(player, "", Chatter.nameFormat);
 
         if (Chatter.craftircenabled) {
@@ -58,7 +57,7 @@ public class ChatterPlayerListener implements Listener {
         }
         if (Chatter.playerlist) {
             try {
-                player.setPlayerListName(name);
+                player.setPlayerListName(listname);
             } catch (IllegalArgumentException e) {
                 System.out.println("[Chatter] Name-format results in non-unique name. Defaulting to Registered Name");
                 player.setPlayerListName(player.getName());
@@ -66,7 +65,7 @@ public class ChatterPlayerListener implements Listener {
         }
 
         if (Chatter.spoutisEnabled) {
-            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, name);
+            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, listname);
         }
 
         if (Chatter.textwrapping) {
@@ -88,19 +87,52 @@ public class ChatterPlayerListener implements Listener {
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        String name = Chatter.format.parseName(player, Chatter.nameFormat);
+        String msg = event.getJoinMessage();
+        String listname = Chatter.format.parseName(player, Chatter.nameFormat);
+        String format = Chatter.format.parseChat(player, msg, Chatter.joinFormat);
         if (Chatter.playerlist) {
             try {
-                player.setPlayerListName(name);
+                player.setPlayerListName(listname);
             } catch (IllegalArgumentException e) {
                 System.out.println("[Chatter] Name-format too long or results in non-unique name. Defaulting to Registered Name");
                 player.setPlayerListName(player.getName());
             }
         }
-
-        if (Chatter.spoutisEnabled) {
-            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, name);
+        if (Chatter.craftircenabled) {
+            Chatter.irc.relaymsg("join", format, "");
         }
+        if (Chatter.spoutisEnabled) {
+            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, listname);
+        }
+        event.setJoinMessage(format);
+    }
+    
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onPlayerQuit (PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        String msg = event.getQuitMessage();
+        String format = Chatter.format.parseChat(player, msg, Chatter.quitFormat);
+
+        event.setQuitMessage(format);
+    }
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onPlayerKick (PlayerKickEvent event) {
+        Player player = event.getPlayer();
+        String msg = event.getReason();
+        String format = Chatter.format.parseChat(player, msg, Chatter.kickFormat);
+        event.setLeaveMessage(format);
+    }
+    
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        String msg = event.getDeathMessage();
+        String format = Chatter.format.parseChat(player, msg, Chatter.deathFormat);
+        
+       if (Chatter.craftircenabled) {
+           Chatter.irc.relaymsg("generic", "",format );
+       }
+        event.setDeathMessage(format);
     }
 
     // Use CommandPreprocess because that's what Justin said.

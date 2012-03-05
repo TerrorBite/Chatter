@@ -1,7 +1,6 @@
 package com.dral.Chatter.integration;
 
 import com.dral.Chatter.Chatter;
-import com.ensifera.animosity.craftirc.CraftIRC;
 import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
@@ -9,6 +8,7 @@ import java.util.List;
 
 public class ChatterCraftIRC implements EndPoint {
     Chatter Chatter;
+
     public ChatterCraftIRC (Chatter Chatter){
         this.Chatter = Chatter;
     }
@@ -28,9 +28,14 @@ public class ChatterCraftIRC implements EndPoint {
     }
 
     public void relaymsg(String eventType, String sender, String message) {
+        relaymsg(eventType, sender, message, "");
+    }
+
+    public void relaymsg(String eventType, String sender, String message, String mod) {
         RelayedMessage rm = Chatter.craftirchandler.newMsg(this, null, eventType);
         rm.setField("message", message);
         rm.setField("sender", sender);
+        rm.setField("moderator", mod);
         rm.post();
     }
 

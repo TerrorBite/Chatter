@@ -18,7 +18,11 @@ public class ChatterConfigThing {
         Chatter.chatFormat = config.getString("message-format", Chatter.chatFormat);
         Chatter.meFormat = config.getString("me-format", Chatter.meFormat);
         Chatter.nameFormat = config.getString("name-format", Chatter.nameFormat);
-        Chatter.dateFormat = config.getString("date-format", Chatter.nameFormat);
+        Chatter.dateFormat = config.getString("date-format", Chatter.dateFormat);
+        Chatter.deathFormat = config.getString("death-format", Chatter.deathFormat);
+        Chatter.quitFormat = config.getString("quit-format", Chatter.quitFormat);
+        Chatter.joinFormat = config.getString("join-format", Chatter.joinFormat);
+        Chatter.kickFormat = config.getString("kick-format", Chatter.kickFormat);
         Chatter.textwrapping = config.getBoolean("text-wrapping", Chatter.textwrapping);
         Chatter.nether_name = config.getString("nether-name", Chatter.nether_name);
         Chatter.logEverything = config.getBoolean("log-everything", Chatter.logEverything);
@@ -34,6 +38,10 @@ public class ChatterConfigThing {
         config.setProperty("censor-list", Chatter.censorWords);
         config.setProperty("first-message-format", Chatter.chatFormat);
         config.setProperty("date-format", Chatter.dateFormat);
+        config.setProperty("death-format", Chatter.deathFormat);
+        config.setProperty("join-format", Chatter.joinFormat);
+        config.setProperty("quit-format", Chatter.quitFormat);
+        config.setProperty("kick-format", Chatter.kickFormat);
         config.setProperty("me-format", Chatter.meFormat);
         config.setProperty("nether-name", Chatter.nether_name);
         config.setProperty("log-everything", Chatter.logEverything);
@@ -63,6 +71,26 @@ public class ChatterConfigThing {
 
         if (config.getProperty("date-format") == null) {
             config.setProperty("date-format", Chatter.dateFormat);
+            hasChanged = true;
+        }
+
+        if (config.getProperty("death-format") == null) {
+            config.setProperty("death-format", Chatter.deathFormat);
+            hasChanged = true;
+        }
+
+        if (config.getProperty("join-format") == null) {
+            config.setProperty("join-format", Chatter.joinFormat);
+            hasChanged = true;
+        }
+
+        if (config.getProperty("quit-format") == null) {
+            config.setProperty("quit-format", Chatter.quitFormat);
+            hasChanged = true;
+        }
+
+        if (config.getProperty("kick-format") == null) {
+            config.setProperty("kick-format", Chatter.kickFormat);
             hasChanged = true;
         }
 

@@ -27,7 +27,6 @@ import com.dral.Chatter.integration.ChatterCraftIRC;
 import com.dral.Chatter.listeners.ChatterPlayerListener;
 import com.dral.Chatter.permissions.ChatterPermissionsHandler;
 import com.ensifera.animosity.craftirc.CraftIRC;
-import com.massivecraft.factions.P;
 import com.onarandombox.MultiverseCore.api.Core;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -40,6 +39,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.player.SpoutPlayer;
+import com.massivecraft.factions.Factions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -71,7 +71,6 @@ public class Chatter extends JavaPlugin {
     public boolean logEverything = false;
     public boolean playerlist = false;
 
-    public P factionpluginthing;
     public boolean factionisEnabled = false;
     public Core multiversepluginthing;
     public boolean multiverseisEnabled = false;
@@ -86,6 +85,7 @@ public class Chatter extends JavaPlugin {
     private ChatterConfigThing configThing = new ChatterConfigThing(this);
     private ChatterPlayerListener pListener = new ChatterPlayerListener(this);
     public final ChatterPermissionsHandler permhandler = new ChatterPermissionsHandler(this);
+    public Factions factionpluginthing;
 
     //private ChatterConfigThong configThong;
 
@@ -97,7 +97,7 @@ public class Chatter extends JavaPlugin {
 
         Plugin factions = getServer().getPluginManager().getPlugin("Factions");
         if (factions != null) {
-            this.factionpluginthing = (P) factions;
+            this.factionpluginthing = (Factions) factions;
             this.factionisEnabled = true;
         }
 

@@ -71,7 +71,7 @@ public class ChatterPlayerListener implements Listener {
             event.setFormat(format);
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
             for (String message : messages) {
-                Player[] players = event.getRecipients();
+                Player[] players = Chatter.server.getOnlinePlayers();
                 for (Player playertemp : players) {
                     playertemp.sendMessage(message);
                 }

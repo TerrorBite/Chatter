@@ -23,11 +23,10 @@ package com.dral.Chatter;
 import com.dral.Chatter.configuration.ChatterConfigThing;
 import com.dral.Chatter.configuration.Configuration;
 import com.dral.Chatter.formatting.ChatterFormat;
+import com.dral.Chatter.integration.ChatterCraftIRC;
 import com.dral.Chatter.listeners.ChatterPlayerListener;
 import com.dral.Chatter.permissions.ChatterPermissionsHandler;
 import com.ensifera.animosity.craftirc.CraftIRC;
-import com.ensifera.animosity.craftirc.EndPoint;
-import com.ensifera.animosity.craftirc.RelayedMessage;
 import com.massivecraft.factions.Factions;
 import com.onarandombox.MultiverseCore.api.Core;
 import net.milkbowl.vault.chat.Chat;
@@ -47,9 +46,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class Chatter extends JavaPlugin implements EndPoint {
+public class Chatter extends JavaPlugin {
 
-    public CraftIRC craftirchandler;
     private static final Logger log = Logger.getLogger("Minecraft");
     public Server server;
     public static Chat chatinfo = null;
@@ -80,11 +78,15 @@ public class Chatter extends JavaPlugin implements EndPoint {
     public SpoutPlayer spoutpluginthing;
     public boolean spoutisEnabled = false;
     public boolean craftircenabled = false;
+    public CraftIRC craftirchandler;
+    public ChatterCraftIRC irc;
+
 
     public ChatterFormat format = new ChatterFormat(this);
     private ChatterConfigThing configThing = new ChatterConfigThing(this);
     private ChatterPlayerListener pListener = new ChatterPlayerListener(this);
     public final ChatterPermissionsHandler permhandler = new ChatterPermissionsHandler(this);
+
     //private ChatterConfigThong configThong;
 
     public void onEnable() {
@@ -113,19 +115,11 @@ public class Chatter extends JavaPlugin implements EndPoint {
 
         Plugin craftirc = getServer().getPluginManager().getPlugin("CraftIRC");
         if (craftirc != null) {
-            this.craftircenabled = true;
-            try {
-                craftirchandler = (CraftIRC) craftirc;
-                craftirchandler.registerEndPoint("Chatter", this);
-                RelayedMessage rm = craftirchandler.newMsg(this, null, "generic");
-                rm.setField("message", "I'm aliiive!");
-                rm.post();
-            } catch (ClassCastException ex) {
-                ex.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
+            this.craftirchandler = (CraftIRC) craftirc;
+            this.irc = new ChatterCraftIRC(this);
+            irc.initIRC();
             }
-        }
+
         pm.registerEvents(pListener, this);
 
         setupPermissions();
@@ -186,31 +180,4 @@ public class Chatter extends JavaPlugin implements EndPoint {
             logIt(message);
         }
     }
-
-     public Type getType() {
-        return EndPoint.Type.MINECRAFT;
-    }
-
-    public void messageIn(RelayedMessage msg) {
-        if (msg.getEvent().equals("join")) {
-            getServer().broadcastMessage(msg.getField("sender") + " joined the game!");
-        }
-    }
-
-    public boolean userMessageIn(String username, RelayedMessage msg) {
-        return false;
-    }
-
-    public boolean adminMessageIn(RelayedMessage msg) {
-        return false;
-    }
-
-    public List<String> listUsers() {
-        return null;
-    }
-
-    public List<String> listDisplayUsers() {
-        return null;
-    }
-
 }

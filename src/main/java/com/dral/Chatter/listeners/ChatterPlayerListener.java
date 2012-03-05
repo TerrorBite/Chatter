@@ -19,8 +19,7 @@ package com.dral.Chatter.listeners;
  */
 
 import com.dral.Chatter.Chatter;
-import com.dral.Chatter.formatting.*;
-import com.ensifera.animosity.craftirc.RelayedMessage;
+import com.dral.Chatter.formatting.BetterChatWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,6 +32,7 @@ import org.getspout.spoutapi.player.SpoutPlayer;
 
 public class ChatterPlayerListener implements Listener {
     Chatter Chatter;
+
 
     public ChatterPlayerListener (Chatter Chatter) {
         this.Chatter = Chatter;
@@ -52,10 +52,7 @@ public class ChatterPlayerListener implements Listener {
         String ircname = Chatter.format.parseChat(player, "", Chatter.nameFormat);
 
         if (Chatter.craftircenabled) {
-            RelayedMessage rm = Chatter.craftirchandler.newMsg(Chatter, null, "chat");
-            rm.setField("message", msg);
-            rm.setField("sender", ircname);
-            rm.post();
+            Chatter.irc.relaymsg("chat", ircname, msg);
         }
         if (Chatter.playerlist) {
             try {
@@ -122,10 +119,7 @@ public class ChatterPlayerListener implements Listener {
                 Chatter.server.broadcastMessage(messageThing);
             }
             if (Chatter.craftircenabled) {
-                RelayedMessage rm = Chatter.craftirchandler.newMsg(Chatter, null, "action");
-                rm.setField("message", s);
-                rm.setField("sender", ChatColor.stripColor(player.getDisplayName()));
-                rm.post();
+                Chatter.irc.relaymsg("action", s, ChatColor.stripColor(player.getDisplayName()));
             }
             event.setCancelled(true);
         }

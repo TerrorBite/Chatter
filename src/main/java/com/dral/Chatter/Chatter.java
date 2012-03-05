@@ -26,11 +26,7 @@ import com.dral.Chatter.formatting.ChatterFormat;
 import com.dral.Chatter.integration.ChatterCraftIRC;
 import com.dral.Chatter.listeners.ChatterPlayerListener;
 import com.dral.Chatter.permissions.ChatterPermissionsHandler;
-import com.ensifera.animosity.craftirc.CraftIRC;
-import com.massivecraft.factions.Factions;
-import com.onarandombox.MultiverseCore.api.Core;
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -39,7 +35,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import org.getspout.spoutapi.player.SpoutPlayer;
+import com.ensifera.animosity.craftirc.CraftIRC;
+import com.massivecraft.factions.Factions;
+import com.onarandombox.MultiverseCore.api.Core;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.permission.Permission;
 
 import java.io.File;
 import java.util.ArrayList;

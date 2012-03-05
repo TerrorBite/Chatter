@@ -25,9 +25,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import java.util.Set;
@@ -109,7 +108,7 @@ public class ChatterPlayerListener implements Listener {
     }
     
     @EventHandler
-    public void onPlayerQuit (PlayerQuitEvent event) {        
+    public void onPlayerQuit (PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String msg = event.getQuitMessage();
         String format = Chatter.format.parseChat(player, msg, Chatter.quitFormat);

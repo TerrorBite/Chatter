@@ -12,12 +12,11 @@ public class ChatterCraftIRC implements EndPoint {
     public ChatterCraftIRC (Chatter Chatter){
         this.Chatter = Chatter;
     }
-    public CraftIRC craftirchandler;
-
+    
     public void initIRC() {
         try {
-            craftirchandler.registerEndPoint("Chatter", this);
-            RelayedMessage rm = craftirchandler.newMsg(this, null, "generic");
+            Chatter.craftirchandler.registerEndPoint("Chatter", this);
+            RelayedMessage rm = Chatter.craftirchandler.newMsg(this, null, "generic");
             rm.setField("message", "I'm aliiive!");
             rm.post();
             Chatter.craftircenabled = true;

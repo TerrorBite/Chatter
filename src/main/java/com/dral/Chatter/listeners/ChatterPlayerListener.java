@@ -30,6 +30,8 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
+import java.util.Set;
+
 public class ChatterPlayerListener implements Listener {
     Chatter Chatter;
 
@@ -71,7 +73,7 @@ public class ChatterPlayerListener implements Listener {
             event.setFormat(format);
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
             for (String message : messages) {
-                Player[] players = Chatter.server.getOnlinePlayers();
+                Set<Player> players = event.getRecipients();
                 for (Player playertemp : players) {
                     playertemp.sendMessage(message);
                 }

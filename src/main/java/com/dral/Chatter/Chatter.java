@@ -27,7 +27,7 @@ import com.dral.Chatter.integration.ChatterCraftIRC;
 import com.dral.Chatter.listeners.ChatterPlayerListener;
 import com.dral.Chatter.permissions.ChatterPermissionsHandler;
 import com.ensifera.animosity.craftirc.CraftIRC;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.Factions;
 import com.onarandombox.MultiverseCore.api.Core;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -71,7 +71,7 @@ public class Chatter extends JavaPlugin {
     public boolean logEverything = false;
     public boolean playerlist = false;
 
-    public P factionpluginthing;
+    public Factions factionpluginthing;
     public boolean factionisEnabled = false;
     public Core multiversepluginthing;
     public boolean multiverseisEnabled = false;
@@ -97,7 +97,7 @@ public class Chatter extends JavaPlugin {
 
         Plugin factions = getServer().getPluginManager().getPlugin("Factions");
         if (factions != null) {
-            this.factionpluginthing = (P) factions;
+            this.factionpluginthing = (Factions) factions;
             this.factionisEnabled = true;
         }
 

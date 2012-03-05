@@ -107,7 +107,7 @@ public class ChatterPlayerListener implements Listener {
         event.setJoinMessage(format);
     }
     
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerQuit (PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String msg = event.getQuitMessage();

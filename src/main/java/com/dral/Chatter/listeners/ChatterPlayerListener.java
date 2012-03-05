@@ -1,4 +1,4 @@
-package com.dral.Chatter;
+package com.dral.Chatter.listeners;
 
 /**
  * iChat - A chat formatting plugin for Bukkit.
@@ -18,24 +18,28 @@ package com.dral.Chatter;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.ensifera.animosity.craftirc.RelayedMessage;
+import com.dral.Chatter.Chatter;
+import com.dral.Chatter.formatting.BetterChatWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
-public class ChatterPlayerListener extends PlayerListener {
+public class ChatterPlayerListener implements Listener {
     Chatter Chatter;
 
-    ChatterPlayerListener(Chatter Chatter) {
+
+    public ChatterPlayerListener (Chatter Chatter) {
         this.Chatter = Chatter;
     }
 
 
-    @Override
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event) {
         if (event.isCancelled()) {
             return;
@@ -48,10 +52,7 @@ public class ChatterPlayerListener extends PlayerListener {
         String ircname = Chatter.format.parseChat(player, "", Chatter.nameFormat);
 
         if (Chatter.craftircenabled) {
-            RelayedMessage rm = Chatter.craftirchandler.newMsg(Chatter, null, "chat");
-            rm.setField("message", msg);
-            rm.setField("sender", ircname);
-            rm.post();
+            Chatter.irc.relaymsg("chat", ircname, msg);
         }
         if (Chatter.playerlist) {
             try {
@@ -63,7 +64,7 @@ public class ChatterPlayerListener extends PlayerListener {
         }
 
         if (Chatter.spoutisEnabled) {
-            SpoutManager.getAppearanceManager().setGlobalTitle(player, name);
+            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, name);
         }
 
         if (Chatter.textwrapping) {
@@ -82,7 +83,7 @@ public class ChatterPlayerListener extends PlayerListener {
         System.out.println(ChatColor.stripColor(format));
     }
 
-    @Override
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String name = Chatter.format.parseName(player, Chatter.nameFormat);
@@ -96,12 +97,12 @@ public class ChatterPlayerListener extends PlayerListener {
         }
 
         if (Chatter.spoutisEnabled) {
-            SpoutManager.getAppearanceManager().setGlobalTitle(player, name);
+            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, name);
         }
     }
 
     // Use CommandPreprocess because that's what Justin said.
-    @Override
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if (event.isCancelled()) {
             return;
@@ -118,10 +119,7 @@ public class ChatterPlayerListener extends PlayerListener {
                 Chatter.server.broadcastMessage(messageThing);
             }
             if (Chatter.craftircenabled) {
-                RelayedMessage rm = Chatter.craftirchandler.newMsg(Chatter, null, "action");
-                rm.setField("message", s);
-                rm.setField("sender", ChatColor.stripColor(player.getDisplayName()));
-                rm.post();
+                Chatter.irc.relaymsg("action", s, ChatColor.stripColor(player.getDisplayName()));
             }
             event.setCancelled(true);
         }

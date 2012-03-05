@@ -1,4 +1,6 @@
-package com.dral.Chatter;
+package com.dral.Chatter.configuration;
+
+import com.dral.Chatter.Chatter;
 
 public class ChatterConfigThing {
     Chatter Chatter;
@@ -8,7 +10,7 @@ public class ChatterConfigThing {
         this.Chatter = Chatter;
     }
 
-    protected void loadConfig() {
+    public void loadConfig() {
         Configuration config = Chatter.config;
         config.load();
 
@@ -23,7 +25,7 @@ public class ChatterConfigThing {
         Chatter.playerlist = config.getBoolean("update-playerlist", Chatter.playerlist);
     }
 
-    protected void defaultConfig() {
+    public void defaultConfig() {
         Configuration config = Chatter.config;
         config.save();
 
@@ -39,7 +41,7 @@ public class ChatterConfigThing {
         config.save();
     }
 
-    protected void checkConfig() {
+    public void checkConfig() {
         Configuration config = Chatter.config;
         config.load();
 

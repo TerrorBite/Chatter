@@ -1,7 +1,7 @@
 name: Chatter
 main: com.dral.Chatter.Chatter
-version: 2.2.0
-author: [Dral, Tatara88]
+version: 2.2.5
+authors: [Dral, Tatara88]
 website: http://twitter.com/dralletje
 commands:
     reloadchatter:
@@ -17,4 +17,5 @@ permissions:
     description: Allows people to use colors in chat.
   chatter.k:
     description: Only give this to cool people, cuze this will freeze everyone!
+depend: [Vault]
 softdepend: [CraftIRC]

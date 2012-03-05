@@ -1,4 +1,4 @@
-package com.dral.Chatter;
+package com.dral.Chatter.formatting;
 
 import org.bukkit.entity.Player;
 

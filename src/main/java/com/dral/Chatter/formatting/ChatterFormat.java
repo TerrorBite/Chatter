@@ -3,7 +3,6 @@ package com.dral.Chatter.formatting;
 import com.dral.Chatter.Chatter;
 import org.bukkit.entity.Player;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;

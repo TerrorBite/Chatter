@@ -66,6 +66,11 @@ public class Chatter extends JavaPlugin {
     public String meFormat = "* +name +message";
     public String nameFormat = "[$prefix+group$suffix&f] +name";
     public String dateFormat = "HH:mm:ss";
+    public String deathFormat = "[$prefix+group$suffix&f] +name +message";
+    public String quitFormat = "[$prefix+group$suffix&f] +name +message";
+    public String joinFormat = "[$prefix+group$suffix&f] +name +message";
+    public String kickFormat = "[$prefix+group$suffix&f] +name +message";
+    public String listNameFormat = "[$prefix] +name";
     public boolean textwrapping = true;
     public String nether_name = "+world nether";
     public boolean logEverything = false;
@@ -86,6 +91,7 @@ public class Chatter extends JavaPlugin {
     private ChatterConfigThing configThing = new ChatterConfigThing(this);
     private ChatterPlayerListener pListener = new ChatterPlayerListener(this);
     public final ChatterPermissionsHandler permhandler = new ChatterPermissionsHandler(this);
+    
 
     //private ChatterConfigThong configThong;
 

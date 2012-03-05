@@ -132,8 +132,6 @@ public class ChatterFormat {
         }
         String time = time();
 
-        // We're sending this to String.format, so we need to escape those pesky % symbols
-        msg = msg.replaceAll("%", "%%");
         msg = censor(player, msg);
 
         String format = parseVars(chatFormat, player);

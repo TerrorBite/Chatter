@@ -38,19 +38,19 @@ public class ChatterPlayerListener implements Listener {
     public ChatterPlayerListener (Chatter Chatter) {
         this.Chatter = Chatter;
     }
+    
+    public Player player;
+    public String ircname;
 
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
 
-        Player player = event.getPlayer();
+
+        player = event.getPlayer();
         String msg = event.getMessage();
         String format = Chatter.format.parseChat(player, msg) + " ";
         String listname = Chatter.format.parseName(player, Chatter.listNameFormat);
-        String ircname = Chatter.format.parseChat(player, "", Chatter.nameFormat);
 
         if (Chatter.craftircenabled) {
             Chatter.irc.relaymsg("chat", ircname, msg);
@@ -75,25 +75,28 @@ public class ChatterPlayerListener implements Listener {
                 if (Chatter.factionisEnabled) {
                 Set<Player> players = event.getRecipients();
                 for (Player playertemp : players) {
-                    message = Chatter.format.parseChat(player, message, Chatter.chatFormat, playertemp);
+                    message = Chatter.format.perPlayerParse(player, message, playertemp);
                     playertemp.sendMessage(message);
                     }
-                }
-                Set<Player> players = event.getRecipients();
-                for (Player playertemp : players) {
-                 playertemp.sendMessage(message);
+                } else {
+                    Set<Player> players = event.getRecipients();
+                    for (Player playertemp : players) {
+                        playertemp.sendMessage(message);
+                    }
                 }
             }
             event.setCancelled(true);
         } else {
             event.setFormat(format);
         }
+        format = Chatter.format.perPlayerParse(player, format, null);
         System.out.println(ChatColor.stripColor(format));
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+        player = event.getPlayer();
+        ircname = Chatter.format.parseChat(player, "", Chatter.nameFormat);
         String msg = event.getJoinMessage();
         String listname = Chatter.format.parseName(player, Chatter.nameFormat);
         String format = Chatter.format.parseChat(player, msg, Chatter.joinFormat);
@@ -106,7 +109,7 @@ public class ChatterPlayerListener implements Listener {
             }
         }
         if (Chatter.craftircenabled) {
-            Chatter.irc.relaymsg("join", "", format);
+            Chatter.irc.relaymsg("join", format, "");
         }
         if (Chatter.spoutisEnabled) {
             Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, listname);
@@ -116,7 +119,7 @@ public class ChatterPlayerListener implements Listener {
     
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerQuit (PlayerQuitEvent event) {
-        Player player = event.getPlayer();
+        player = event.getPlayer();
         String msg = event.getQuitMessage();
         String format = Chatter.format.parseChat(player, msg, Chatter.quitFormat);
 
@@ -128,7 +131,7 @@ public class ChatterPlayerListener implements Listener {
     }
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerKick (PlayerKickEvent event) {
-        Player player = event.getPlayer();
+        player = event.getPlayer();
         String msg = event.getReason();
         String format = Chatter.format.parseChat(player, msg, Chatter.kickFormat);
 
@@ -140,12 +143,12 @@ public class ChatterPlayerListener implements Listener {
     
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
+        player = event.getEntity();
         String msg = event.getDeathMessage();
         String format = Chatter.format.parseChat(player, msg, Chatter.deathFormat);
         
        if (Chatter.craftircenabled) {
-           Chatter.irc.relaymsg("generic", "",format );
+           Chatter.irc.relaymsg("death", ircname ,format);
        }
         event.setDeathMessage(format);
     }
@@ -157,7 +160,7 @@ public class ChatterPlayerListener implements Listener {
             return;
         }
 
-        Player player = event.getPlayer();
+        player = event.getPlayer();
         String message = event.getMessage();
 
         if (message.toLowerCase().startsWith("/me ")) {
@@ -168,7 +171,7 @@ public class ChatterPlayerListener implements Listener {
                 Chatter.server.broadcastMessage(messageThing);
             }
             if (Chatter.craftircenabled) {
-                Chatter.irc.relaymsg("action", s, ChatColor.stripColor(player.getDisplayName()));
+                Chatter.irc.relaymsg("action", s, ChatColor.stripColor(ircname));
             }
             event.setCancelled(true);
         }

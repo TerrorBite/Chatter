@@ -104,6 +104,7 @@ public class Chatter extends JavaPlugin {
         Plugin factions = getServer().getPluginManager().getPlugin("Factions");
         if (factions != null) {
             this.factionpluginthing = (P) factions;
+            this.factionpluginthing.handleFactionTagExternally(true);
             this.factionisEnabled = true;
         }
 
@@ -137,6 +138,7 @@ public class Chatter extends JavaPlugin {
         }
         configThing.checkConfig();
         configThing.loadConfig();
+
 
         logIt("Chatter loaded correctly! let's do this!");
     }

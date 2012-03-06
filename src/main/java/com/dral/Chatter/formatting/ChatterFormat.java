@@ -138,13 +138,7 @@ public class ChatterFormat {
             return msg;
         }
 
-        String factiontag = "nofactionsplugin:(";
-        if (Chatter.factionisEnabled) {
-            factiontag = Chatter.factionpluginthing.getPlayerFactionTagRelation(player, reciever);
-        }
-
         String mvalias = "multiverse?!";
-        String mvcolor = "multiverse?";
         if (Chatter.multiverseisEnabled) {
             mvalias = Chatter.multiversepluginthing.getMVWorldManager().getMVWorld(player.getWorld()).getColoredWorldString();
             if (mvalias.isEmpty()) {
@@ -153,9 +147,21 @@ public class ChatterFormat {
         }
 
         // Order is important, this allows us to use all variables in the suffix and prefix! But no variables in the message
-        String[] search = new String[]{"mvcolor", "+mvalias", "+xplevel", "+gamemode,+gm", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+world,+w", "+time,+t", "+name,+n", "+displayname,+d", "+message,+m"};
-        String[] replace = new String[]{mvcolor, mvalias, level, gMode, factiontag, group, healthbar, health, world, time, player.getName(), player.getDisplayName(), msg};
+        String[] search = new String[]{"+mvalias", "+xplevel", "+gamemode,+gm",  "+group,+g", "+healthbar,+hb", "+health,+h", "+world,+w", "+time,+t", "+name,+n", "+displayname,+d", "+message,+m"};
+        String[] replace = new String[]{mvalias, level, gMode, group, healthbar, health, world, time, player.getName(), player.getDisplayName(), msg};
         return convertColors(replaceVars(format, search, replace));
+    }
+    
+    public String perPlayerParse(Player player, String msg, Player reciever) {
+
+        String factiontag = "nofactionsplugin:(";
+        if (Chatter.factionisEnabled) {
+            factiontag = Chatter.factionpluginthing.getPlayerFactionTagRelation(player, reciever);
+        }
+
+       String[] search = new String[]{"+faction,+f"};
+       String[] replace = new String[]{factiontag};
+       return replaceVars(msg, search, replace);
     }
 
     public String parseChat(Player p, String msg) {

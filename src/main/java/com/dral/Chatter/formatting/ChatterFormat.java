@@ -118,14 +118,14 @@ public class ChatterFormat {
 
     }
 
-    public String parseChat(Player player, String msg, String chatFormat) {
+    public String parseChat(Player player, String msg, String chatFormat, Player reciever) {
         String level = String.valueOf(player.getLevel());
         String gMode = player.getGameMode().name();
         String group = Chatter.permhandler.getGroup(player);
         String healthbar = healthBar(player);
         String health = String.valueOf(player.getHealth());
         String world = player.getWorld().getName();
-
+        
         if (world.contains("_nether")) {
             world = Chatter.nether_name.replace("+world", world.replace("_nether", ""));
         }
@@ -140,7 +140,7 @@ public class ChatterFormat {
 
         String factiontag = "nofactionsplugin:(";
         if (Chatter.factionisEnabled) {
-            factiontag = Chatter.factionpluginthing.getPlayerFactionTag(player);
+            factiontag = Chatter.factionpluginthing.getPlayerFactionTagRelation(player, reciever);
         }
 
         String mvalias = "multiverse?!";
@@ -159,7 +159,11 @@ public class ChatterFormat {
     }
 
     public String parseChat(Player p, String msg) {
-        return parseChat(p, msg, Chatter.chatFormat);
+        return parseChat(p, msg, Chatter.chatFormat, null);
+    }
+    
+    public  String parseChat(Player player, String msg, String format){
+        return  parseChat(player, msg, format, null);
     }
 
     public String healthBar(Player player) {

@@ -2,9 +2,9 @@ package com.dral.Chatter;
 
 /**
  * Chatter - The new chat plugin.
- * Copyright (C) 2011 Michiel Dral <m.c.dral@Gmail.com>
- * Copyright (C) 2011 Steven "Drakia" Scott <Drakia@Gmail.com>
- * Copyright (C) 2011 MiracleM4n <https://github.com/MiracleM4n/>
+ * Copyright (C) 2012 Michiel Dral <m.c.dral@Gmail.com>
+ * Copyright (C) 2012 Steven "Drakia" Scott <Drakia@Gmail.com>
+ * Copyright (C) 2012 MiracleM4n <https://github.com/MiracleM4n/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,11 @@ import com.dral.Chatter.formatting.ChatterFormat;
 import com.dral.Chatter.integration.ChatterCraftIRC;
 import com.dral.Chatter.listeners.ChatterPlayerListener;
 import com.dral.Chatter.permissions.ChatterPermissionsHandler;
-
+import com.ensifera.animosity.craftirc.CraftIRC;
+import com.massivecraft.factions.P;
+import com.onarandombox.MultiverseCore.api.Core;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,13 +39,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import org.getspout.spoutapi.player.SpoutPlayer;
-import com.ensifera.animosity.craftirc.CraftIRC;
-import com.massivecraft.factions.Factions;
-import com.onarandombox.MultiverseCore.api.Core;
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.permission.Permission;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,12 +66,17 @@ public class Chatter extends JavaPlugin {
     public String meFormat = "* +name +message";
     public String nameFormat = "[$prefix+group$suffix&f] +name";
     public String dateFormat = "HH:mm:ss";
+    public String deathFormat = "[$prefix+group$suffix&f] +name +message";
+    public String quitFormat = "[$prefix+group$suffix&f] +name +message";
+    public String joinFormat = "[$prefix+group$suffix&f] +name +message";
+    public String kickFormat = "[$prefix+group$suffix&f] +name +message";
+    public String listNameFormat = "[$prefix] +name";
     public boolean textwrapping = true;
     public String nether_name = "+world nether";
     public boolean logEverything = false;
     public boolean playerlist = false;
 
-    public Factions factionpluginthing;
+    public P factionpluginthing;
     public boolean factionisEnabled = false;
     public Core multiversepluginthing;
     public boolean multiverseisEnabled = false;
@@ -88,6 +91,7 @@ public class Chatter extends JavaPlugin {
     private ChatterConfigThing configThing = new ChatterConfigThing(this);
     private ChatterPlayerListener pListener = new ChatterPlayerListener(this);
     public final ChatterPermissionsHandler permhandler = new ChatterPermissionsHandler(this);
+    
 
     //private ChatterConfigThong configThong;
 
@@ -99,7 +103,7 @@ public class Chatter extends JavaPlugin {
 
         Plugin factions = getServer().getPluginManager().getPlugin("Factions");
         if (factions != null) {
-            this.factionpluginthing = (Factions) factions;
+            this.factionpluginthing = (P) factions;
             this.factionisEnabled = true;
         }
 

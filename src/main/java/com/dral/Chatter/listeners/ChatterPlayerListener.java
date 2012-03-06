@@ -72,9 +72,16 @@ public class ChatterPlayerListener implements Listener {
             event.setFormat(format);
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
             for (String message : messages) {
+                if (Chatter.factionisEnabled) {
                 Set<Player> players = event.getRecipients();
                 for (Player playertemp : players) {
+                    message = Chatter.format.parseChat(player, message, Chatter.chatFormat, playertemp);
                     playertemp.sendMessage(message);
+                    }
+                }
+                Set<Player> players = event.getRecipients();
+                for (Player playertemp : players) {
+                 playertemp.sendMessage(message);
                 }
             }
             event.setCancelled(true);
@@ -99,7 +106,7 @@ public class ChatterPlayerListener implements Listener {
             }
         }
         if (Chatter.craftircenabled) {
-            Chatter.irc.relaymsg("join", format, "");
+            Chatter.irc.relaymsg("join", "", format);
         }
         if (Chatter.spoutisEnabled) {
             Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, listname);
@@ -113,6 +120,10 @@ public class ChatterPlayerListener implements Listener {
         String msg = event.getQuitMessage();
         String format = Chatter.format.parseChat(player, msg, Chatter.quitFormat);
 
+        if (Chatter.craftircenabled) {
+            Chatter.irc.relaymsg("quit", "", format);
+        }
+
         event.setQuitMessage(format);
     }
     @EventHandler (priority = EventPriority.HIGHEST)
@@ -120,6 +131,10 @@ public class ChatterPlayerListener implements Listener {
         Player player = event.getPlayer();
         String msg = event.getReason();
         String format = Chatter.format.parseChat(player, msg, Chatter.kickFormat);
+
+        if (Chatter.craftircenabled) {
+            Chatter.irc.relaymsg("kick", "", format);
+        }
         event.setLeaveMessage(format);
     }
     

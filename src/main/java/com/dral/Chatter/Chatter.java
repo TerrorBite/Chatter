@@ -2,9 +2,9 @@ package com.dral.Chatter;
 
 /**
  * Chatter - The new chat plugin.
- * Copyright (C) 2011 Michiel Dral <m.c.dral@Gmail.com>
- * Copyright (C) 2011 Steven "Drakia" Scott <Drakia@Gmail.com>
- * Copyright (C) 2011 MiracleM4n <https://github.com/MiracleM4n/>
+ * Copyright (C) 2012 Michiel Dral <m.c.dral@Gmail.com>
+ * Copyright (C) 2012 Steven "Drakia" Scott <Drakia@Gmail.com>
+ * Copyright (C) 2012 MiracleM4n <https://github.com/MiracleM4n/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

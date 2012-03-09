@@ -142,6 +142,8 @@ public class ChatterPlayerListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         String msg = event.getDeathMessage();
+        msg = msg.substring(msg.indexOf(" "));
+
         String format = Chatter.format.parseChat(player, msg, Chatter.deathFormat);
         
        if (Chatter.craftircenabled) {

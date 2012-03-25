@@ -15,7 +15,7 @@ permissions:
     description: Allows you to use the '/reloadchatter' command.
   chatter.colors:
     description: Allows people to use colors in chat.
-  chatter.k:
+  chatter.decoration:
     description: Only give this to cool people, cuze this will freeze everyone!
 depend: [Vault]
 softdepend: [CraftIRC]

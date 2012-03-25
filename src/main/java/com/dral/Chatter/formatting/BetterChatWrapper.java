@@ -43,20 +43,6 @@ public class BetterChatWrapper {
             //just setting the local variable(s)
             char ch = text.charAt(i);
 
-            // Get the color, if it is a color the rest will be skipped.
-            if ((ch == COLOR_CHAR || ch == OTHER_COLOR_CHAR) && i < text.length() - 1) {
-                colorChar = text.charAt(++i);
-                if (Character.toString(colorChar).matches("[0-9a-fA-FkK]")) {
-                    out.append(COLOR_CHAR).append(colorChar);
-                } else {
-                    out.append("&").append(colorChar);
-                }
-
-                lineLength += 2;
-                wordLength += 2;
-                continue;
-            }
-
             // Figure out if it's allowed, else skip it or do something :/
             int index = allowedChars.indexOf(ch);
             if (index == -1) {

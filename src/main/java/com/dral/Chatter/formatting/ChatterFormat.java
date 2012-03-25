@@ -71,8 +71,8 @@ public class ChatterFormat {
         return out.toString().trim();
     }
 
-    String convertColors(String str, Player player) {
-        if(player.hasPermission("chatter.colors")) {
+    String convertColors(String str, Boolean colors, Boolean decoration) {
+        if(colors) {
             Pattern color_codes = Pattern.compile("&([0-9A-Fa-f])");
             Matcher find_colors = color_codes.matcher(str);
             while (find_colors.find()) {
@@ -80,7 +80,7 @@ public class ChatterFormat {
                 find_colors = color_codes.matcher(str);
             }
         }
-        if(player.hasPermission("chatter.decoration")) {
+        if(decoration) {
             Pattern color_codes = Pattern.compile("&([k-oK-O])");
             Matcher find_colors = color_codes.matcher(str);
             while (find_colors.find()) {
@@ -89,6 +89,10 @@ public class ChatterFormat {
             }
         }
         return str;
+    }
+
+    String convertColors(String str, Player player) {
+        return convertColors(str, player.hasPermission("chatter.colors"), player.hasPermission("chatter.decoration"));
     }
 
     private String star(String word) {
@@ -119,7 +123,7 @@ public class ChatterFormat {
         }
         String[] search = new String[]{"+xplevel", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+name,+n", "+displayname,+d"};
         String[] replace = new String[]{level, factiontag, group, healthbar, health, player.getName(), player.getDisplayName()};
-        String name = convertColors(replaceVars(format, search, replace)) + "\u00A7F";
+        String name = convertColors(replaceVars(format, search, replace), true, true) + "\u00A7F";
         if (name.length() > 16) {
             return name.substring(0, 12) + "..\u00A7F";
         } else {

@@ -72,22 +72,6 @@ public class ChatterFormat {
     }
 
     String convertColors(String str, Boolean colors, Boolean decoration) {
-        if(colors) {
-            Pattern color_codes = Pattern.compile("&([0-9A-Fa-f])");
-            Matcher find_colors = color_codes.matcher(str);
-            while (find_colors.find()) {
-                str = find_colors.replaceFirst("\u00A7" + find_colors.group(1));
-                find_colors = color_codes.matcher(str);
-            }
-        }
-        if(decoration) {
-            Pattern color_codes = Pattern.compile("&([k-oK-O])");
-            Matcher find_colors = color_codes.matcher(str);
-            while (find_colors.find()) {
-                str = find_colors.replaceFirst("\u00A7" + find_colors.group(1));
-                find_colors = color_codes.matcher(str);
-            }
-        }
         return str;
     }
 
@@ -170,7 +154,7 @@ public class ChatterFormat {
         // Order is important, this allows us to use all variables in the suffix and prefix! But no variables in the message
         String[] search = new String[]{"mvcolor", "+mvalias", "+xplevel", "+gamemode,+gm", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+world,+w", "+time,+t", "+name,+n", "+displayname,+d", "+message,+m"};
         String[] replace = new String[]{mvcolor, mvalias, level, gMode, factiontag, group, healthbar, health, world, time, player.getName(), player.getDisplayName(), msg};
-        return convertColors(replaceVars(format, search, replace), player);
+        return BetterChatWrapper.colorText(replaceVars(format, search, replace));
     }
 
     public String parseChat(Player p, String msg) {

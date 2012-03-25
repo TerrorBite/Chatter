@@ -28,7 +28,7 @@ public class BetterChatWrapper {
     private static final int CHAT_WINDOW_WIDTH = 320;
     private static final int CHAT_STRING_LENGTH = 119;
 
-    public static String[] wrapText(final String text, boolean CanHasColor) {
+    public static String[] wrapText(final String text) {
         final StringBuilder out = new StringBuilder();
         char colorChar = 'f';
         int lineWidth = 0;
@@ -42,6 +42,22 @@ public class BetterChatWrapper {
         for (int i = 0; i < text.length(); i++) {
             //just setting the local variable(s)
             char ch = text.charAt(i);
+
+            // Get the color, if it is a color the rest will be skipped.
+            if ((ch == COLOR_CHAR || ch == OTHER_COLOR_CHAR) && i < text.length() - 1) {
+                colorChar = text.charAt(++i);
+                if (Character.toString(colorChar).matches("[0-9a-fA-Fk-oK-O]")) {
+                    out.append(COLOR_CHAR).append(colorChar);
+                } else if((colorChar == COLOR_CHAR || colorChar == OTHER_COLOR_CHAR)) {
+                    out.append("&");
+                } else {
+                    out.append("&").append(colorChar);
+                }
+
+                lineLength += 2;
+                wordLength += 2;
+                continue;
+            }
 
             // Figure out if it's allowed, else skip it or do something :/
             int index = allowedChars.indexOf(ch);
@@ -110,15 +126,25 @@ public class BetterChatWrapper {
         return out.toString().split("\n");
     }
 
-    public static String[] wrapText(String text) {
-        return wrapText(text, false);
-    }
+    public static String colorText(final String text) {
+        final StringBuilder out = new StringBuilder();
+        char colorChar = 'f';
 
-    public static String[] wrapText(String text, Player player) {
-        if (player.hasPermission("chatter.colors")) {
-            return wrapText(text, true);
-        } else {
-            return wrapText(text, false);
+        // Go over the message char by char.
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            // Get the color
+            if ((ch == COLOR_CHAR || ch == OTHER_COLOR_CHAR) && i < text.length() - 1) {
+                colorChar = text.charAt(++i);
+                if (Character.toString(colorChar).matches("[0-9a-fA-Fk-oK-O]")) {
+                    out.append(COLOR_CHAR).append(colorChar);
+                } else {
+                    out.append("&").append(colorChar);
+                }
+            } else {
+                out.append(ch) ;
+            }
         }
+        return out.toString();
     }
 }

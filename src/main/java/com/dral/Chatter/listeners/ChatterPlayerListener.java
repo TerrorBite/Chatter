@@ -70,18 +70,25 @@ public class ChatterPlayerListener implements Listener {
 
         if (Chatter.textwrapping) {
             event.setFormat(format);
+            if(!player.hasPermission("chatter.colors")) {
+                msg = msg.replaceAll("&([0-9a-fA-F])", "&&$1");
+            }
+            if(!player.hasPermission("chatter.decoration")) {
+                msg = msg.replaceAll("&([k-oK-O])", "&&$1");
+            }
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
             for (String message : messages) {
                 if (Chatter.factionisEnabled) {
-                Set<Player> players = event.getRecipients();
-                for (Player playertemp : players) {
-                    message = Chatter.format.parseChat(player, message, Chatter.chatFormat, playertemp);
-                    playertemp.sendMessage(message);
+                    Set<Player> players = event.getRecipients();
+                    for (Player playertemp : players) {
+                        message = Chatter.format.parseChat(player, message, Chatter.chatFormat, playertemp);
+                        playertemp.sendMessage(message);
+                        }
+                } else {
+                    Set<Player> players = event.getRecipients();
+                    for (Player playertemp : players) {
+                        playertemp.sendMessage(message);
                     }
-                }
-                Set<Player> players = event.getRecipients();
-                for (Player playertemp : players) {
-                 playertemp.sendMessage(message);
                 }
             }
             event.setCancelled(true);
@@ -91,7 +98,7 @@ public class ChatterPlayerListener implements Listener {
         System.out.println(ChatColor.stripColor(format));
     }
 
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler (priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String msg = event.getJoinMessage();

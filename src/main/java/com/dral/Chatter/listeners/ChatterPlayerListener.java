@@ -49,15 +49,14 @@ public class ChatterPlayerListener implements Listener {
         Player player = event.getPlayer();
         String msg = event.getMessage();
         String format = Chatter.format.parseChat(player, msg) + " ";
-        String listname = Chatter.format.parseName(player, Chatter.listNameFormat);
-        String ircname = Chatter.format.parseChat(player, "", Chatter.nameFormat);
+        String name = Chatter.format.parseChat(player, "", Chatter.nameFormat);
 
         if (Chatter.craftircenabled) {
-            Chatter.irc.relaymsg("chat", ircname, msg);
+            Chatter.irc.relaymsg("chat", name, msg);
         }
         if (Chatter.playerlist) {
             try {
-                player.setPlayerListName(listname);
+                player.setPlayerListName(name);
             } catch (IllegalArgumentException e) {
                 System.out.println("[Chatter] Name-format results in non-unique name. Defaulting to Registered Name");
                 player.setPlayerListName(player.getName());
@@ -74,18 +73,17 @@ public class ChatterPlayerListener implements Listener {
                 msg = msg.replaceAll("&([0-9a-fA-F])", "&&$1");
             }
             if(!player.hasPermission("chatter.decoration")) {
-                msg = msg.replaceAll("&([k-oK-O])", "&&$1");
+                msg = msg.replaceAll("&([k-oK-ORr])", "&&$1");
             }
             String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
+            Set<Player> players = event.getRecipients();
             for (String message : messages) {
                 if (Chatter.factionisEnabled) {
-                    Set<Player> players = event.getRecipients();
                     for (Player playertemp : players) {
                         message = Chatter.format.parseChat(player, message, Chatter.chatFormat, playertemp);
                         playertemp.sendMessage(message);
-                        }
+                    }
                 } else {
-                    Set<Player> players = event.getRecipients();
                     for (Player playertemp : players) {
                         playertemp.sendMessage(message);
                     }

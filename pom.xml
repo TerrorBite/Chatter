@@ -52,6 +52,11 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.getspout</groupId>
+			<artifactId>spoutpluginapi</artifactId>
+			<version>dev-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -81,6 +86,10 @@
         <repository>
             <id>mmcave-repo</id>
             <url>http://repo.mmcave.com</url>
+        </repository>
+        <repository>
+        	<id>spout-repo</id>
+        	<url>http://repo.spout.org</url>
         </repository>
 	</repositories>
 </project>

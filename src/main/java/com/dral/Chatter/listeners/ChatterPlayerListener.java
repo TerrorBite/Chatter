@@ -64,7 +64,7 @@ public class ChatterPlayerListener implements Listener {
         }
 
         if (Chatter.spoutisEnabled) {
-            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, listname);
+            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, name);
         }
 
         if (Chatter.textwrapping) {

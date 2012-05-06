@@ -49,50 +49,58 @@ public class ChatterPlayerListener implements Listener {
         Player player = event.getPlayer();
         String msg = event.getMessage();
         String format = Chatter.format.parseChat(player, msg) + " ";
-        String name = Chatter.format.parseChat(player, "", Chatter.nameFormat);
+        String listname = Chatter.format.parseName(player, Chatter.nameFormat);
 
         if (Chatter.craftircenabled) {
-            Chatter.irc.relaymsg("chat", name, msg);
+            Chatter.irc.relaymsg("chat", listname, msg);
         }
         if (Chatter.playerlist) {
             try {
-                player.setPlayerListName(name);
+                player.setPlayerListName(listname);
             } catch (IllegalArgumentException e) {
-                System.out.println("[Chatter] Name-format results in non-unique name. Defaulting to Registered Name");
+                System.out.println("[Chatter] Name-format results in non-unique name. Defaulting to Registered Name ("+e.getMessage()+")");
                 player.setPlayerListName(player.getName());
             }
         }
 
         if (Chatter.spoutisEnabled) {
-            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, name);
+            Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, listname);
         }
 
-        if (Chatter.textwrapping) {
-            event.setFormat(format);
-            if(!player.hasPermission("chatter.colors")) {
-                msg = msg.replaceAll("&([0-9a-fA-F])", "&&$1");
-            }
-            if(!player.hasPermission("chatter.decoration")) {
-                msg = msg.replaceAll("&([k-oK-ORr])", "&&$1");
-            }
-            String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, msg) + " ");
-            Set<Player> players = event.getRecipients();
-            for (String message : messages) {
-                if (Chatter.factionisEnabled) {
-                    for (Player playertemp : players) {
-                        message = Chatter.format.parseChat(player, message, Chatter.chatFormat, playertemp);
-                        playertemp.sendMessage(message);
-                    }
-                } else {
-                    for (Player playertemp : players) {
-                        playertemp.sendMessage(message);
-                    }
-                }
-            }
-            event.setCancelled(true);
-        } else {
+        if (!Chatter.textwrapping) {
             event.setFormat(format);
         }
+
+        event.setFormat(format);
+        if(!player.hasPermission("chatter.colors")) {
+            msg = msg.replaceAll("&([0-9a-fA-F])", "&&$1");
+        }
+        if(!player.hasPermission("chatter.decoration")) {
+            msg = msg.replaceAll("&([k-oK-ORr])", "&&$1");
+        }
+
+        Set<Player> players = event.getRecipients();
+        String message = Chatter.format.parseChat(player, msg) + " ";
+
+        if (Chatter.factionisEnabled && message.contains("+f")) {
+            // If factions is enabled, and there is a +f in the message, change it to be per player.
+            for (Player playertemp : players) {
+                String[] messages = BetterChatWrapper.wrapText(Chatter.format.parsePerPlayer(player, message, playertemp) + " ") ;
+                for(String tempMessage : messages) {
+                    playertemp.sendMessage(tempMessage);
+                }
+            }
+        } else {
+            // If it's just as normal, do it just as normal
+            String[] messages = BetterChatWrapper.wrapText(message);
+            for(Player playertemp : players) {
+                for(String tempMessage : messages) {
+                    playertemp.sendMessage(tempMessage);
+                }
+            }
+        }
+
+        event.setCancelled(true);
         System.out.println(ChatColor.stripColor(format));
     }
 
@@ -108,10 +116,11 @@ public class ChatterPlayerListener implements Listener {
             } catch (IllegalArgumentException e) {
                 System.out.println("[Chatter] Name-format too long or results in non-unique name. Defaulting to Registered Name");
                 player.setPlayerListName(player.getName());
+                System.out.println(e.getMessage()+" in "+e.getClass());
             }
         }
         if (Chatter.craftircenabled) {
-            Chatter.irc.relaymsg("join", "", format);
+            Chatter.irc.relaymsg("join", player.getDisplayName(), format);
         }
         if (Chatter.spoutisEnabled) {
             Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, listname);
@@ -126,7 +135,7 @@ public class ChatterPlayerListener implements Listener {
         String format = Chatter.format.parseChat(player, msg, Chatter.quitFormat);
 
         if (Chatter.craftircenabled) {
-            Chatter.irc.relaymsg("quit", "", format);
+            Chatter.irc.relaymsg("quit", player.getDisplayName(), format);
         }
 
         event.setQuitMessage(format);

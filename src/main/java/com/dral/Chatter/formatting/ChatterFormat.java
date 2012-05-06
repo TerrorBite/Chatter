@@ -71,14 +71,6 @@ public class ChatterFormat {
         return out.toString().trim();
     }
 
-    String convertColors(String str, Boolean colors, Boolean decoration) {
-        return str;
-    }
-
-    String convertColors(String str, Player player) {
-        return convertColors(str, player.hasPermission("chatter.colors"), player.hasPermission("chatter.decoration"));
-    }
-
     private String star(String word) {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < word.length(); i++) {
@@ -89,34 +81,28 @@ public class ChatterFormat {
 
 
     public String parseName(Player player, String nameFormat) {
-        String level = String.valueOf(player.getLevel());
-        String group = Chatter.permhandler.getGroup(player);
-        String healthbar = healthBar(player);
-        String health = String.valueOf(player.getHealth());
-
-
-        String factiontag = "nofactionsplugin:(";
-        if (Chatter.factionisEnabled) {
-            factiontag = Chatter.factionpluginthing.getPlayerFactionTag(player);
-        }
-
-
-        String format = parseVars(nameFormat, player);
-        if (format == null) {
-            return player.getName();
-        }
-        String[] search = new String[]{"+xplevel", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+name,+n", "+displayname,+d"};
-        String[] replace = new String[]{level, factiontag, group, healthbar, health, player.getName(), player.getDisplayName()};
-        String name = convertColors(replaceVars(format, search, replace), true, true) + "\u00A7F";
+        String name = parseChat(player, "", nameFormat);
+        name = BetterChatWrapper.colorText(name);
+        
         if (name.length() > 16) {
-            return name.substring(0, 12) + "..\u00A7F";
+            return name.substring(0, 14) + "..";
         } else {
             return name;
         }
-
     }
 
-    public String parseChat(Player player, String msg, String chatFormat, Player reciever) {
+    public String parsePerPlayer(Player player, String message, Player reciever) {
+        String factiontag = "nofactionsplugin:(";
+        if (Chatter.factionisEnabled) {
+            factiontag = Chatter.factionpluginthing.getPlayerFactionTagRelation(player, reciever);
+        }
+
+        String[] search = new String[]{"+faction,+f"};
+        String[] replace = new String[]{factiontag};
+        return replaceVars(message, search, replace);
+    }
+
+    public String parseChat(Player player, String msg, String chatFormat) {
         String level = String.valueOf(player.getLevel());
         String gMode = player.getGameMode().name();
         String group = Chatter.permhandler.getGroup(player);
@@ -136,11 +122,6 @@ public class ChatterFormat {
             return msg;
         }
 
-        String factiontag = "nofactionsplugin:(";
-        if (Chatter.factionisEnabled) {
-            factiontag = Chatter.factionpluginthing.getPlayerFactionTagRelation(player, reciever);
-        }
-
         String mvalias = "multiverse?!";
         String mvcolor = "multiverse?";
         if (Chatter.multiverseisEnabled) {
@@ -152,18 +133,15 @@ public class ChatterFormat {
         }
 
         // Order is important, this allows us to use all variables in the suffix and prefix! But no variables in the message
-        String[] search = new String[]{"mvcolor", "+mvalias", "+xplevel", "+gamemode,+gm", "+faction,+f", "+group,+g", "+healthbar,+hb", "+health,+h", "+world,+w", "+time,+t", "+name,+n", "+displayname,+d", "+message,+m"};
-        String[] replace = new String[]{mvcolor, mvalias, level, gMode, factiontag, group, healthbar, health, world, time, player.getName(), player.getDisplayName(), msg};
+        String[] search = new String[]{"mvcolor", "+mvalias", "+xplevel", "+gamemode,+gm", "+group,+g", "+healthbar,+hb", "+health,+h", "+world,+w", "+time,+t", "+name,+n", "+displayname,+d", "+message,+m"};
+        String[] replace = new String[]{mvcolor, mvalias, level, gMode, group, healthbar, health, world, time, player.getName(), player.getDisplayName(), msg};
         return BetterChatWrapper.colorText(replaceVars(format, search, replace));
     }
 
     public String parseChat(Player p, String msg) {
-        return parseChat(p, msg, Chatter.chatFormat, null);
+        return parseChat(p, msg, Chatter.chatFormat);
     }
-    
-    public  String parseChat(Player player, String msg, String format){
-        return  parseChat(player, msg, format, null);
-    }
+
 
     public String healthBar(Player player) {
         float maxHealth = 20;

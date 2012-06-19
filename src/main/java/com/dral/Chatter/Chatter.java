@@ -76,6 +76,8 @@ public class Chatter extends JavaPlugin {
     public String nether_name = "+world nether";
     public boolean logEverything = false;
     public boolean playerlist = false;
+    public boolean stripColor = true;
+    public boolean printDeaths = false;
 
     public P factionpluginthing;
     public boolean factionisEnabled = false;

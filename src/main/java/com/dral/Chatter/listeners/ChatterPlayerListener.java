@@ -75,7 +75,10 @@ public class ChatterPlayerListener implements Listener {
             msg = msg.replaceAll("&([k-oK-ORr])", "&&$1");
         }
         
-        if (!Chatter.textwrapping && !Chatter.factionisEnabled) return;
+        if (!Chatter.textwrapping && !Chatter.factionisEnabled) {
+        	System.out.println(Chatter.stripColor ? ChatColor.stripColor(format) : format);
+        	return;
+        }
 
         Set<Player> players = event.getRecipients();
         String message = Chatter.format.parseChat(player, msg) + " ";
@@ -103,7 +106,7 @@ public class ChatterPlayerListener implements Listener {
         }
 
         event.setCancelled(true);
-        System.out.println(ChatColor.stripColor(format));
+        System.out.println(Chatter.stripColor ? ChatColor.stripColor(format) : format);
     }
 
     @EventHandler (priority = EventPriority.LOW)
@@ -166,6 +169,7 @@ public class ChatterPlayerListener implements Listener {
            Chatter.irc.relaymsg("generic", "",format );
        }
         event.setDeathMessage(format);
+        if(Chatter.printDeaths) System.out.println(Chatter.stripColor ? ChatColor.stripColor(format) : format);
     }
 
     // Use CommandPreprocess because that's what Justin said.

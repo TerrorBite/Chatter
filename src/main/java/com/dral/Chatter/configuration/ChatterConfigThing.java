@@ -27,6 +27,7 @@ public class ChatterConfigThing {
         Chatter.nether_name = config.getString("nether-name", Chatter.nether_name);
         Chatter.logEverything = config.getBoolean("log-everything", Chatter.logEverything);
         Chatter.playerlist = config.getBoolean("update-playerlist", Chatter.playerlist);
+        Chatter.stripColor = config.getBoolean("console-strip-color", Chatter.stripColor);
     }
 
     public void defaultConfig() {
@@ -46,6 +47,7 @@ public class ChatterConfigThing {
         config.setProperty("nether-name", Chatter.nether_name);
         config.setProperty("log-everything", Chatter.logEverything);
         config.setProperty("update-playerlist", Chatter.playerlist);
+        config.setProperty("console-strip-color", Chatter.stripColor);
         config.save();
     }
 
@@ -122,6 +124,16 @@ public class ChatterConfigThing {
 
         if (config.getProperty("update-playerlist") == null) {
             config.setProperty("update-playerlist", Chatter.playerlist);
+            hasChanged = true;
+        }
+        
+        if (config.getProperty("console-strip-color") == null) {
+            config.setProperty("console-strip-color", Chatter.stripColor);
+            hasChanged = true;
+        }
+        
+        if (config.getProperty("log-deaths") == null) {
+            config.setProperty("log-deaths", Chatter.printDeaths);
             hasChanged = true;
         }
 

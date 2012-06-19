@@ -67,10 +67,6 @@ public class ChatterPlayerListener implements Listener {
             Chatter.spoutpluginthing.setTitleFor((SpoutPlayer) player, listname);
         }
 
-        if (!Chatter.textwrapping) {
-            event.setFormat(format);
-        }
-
         event.setFormat(format);
         if(!player.hasPermission("chatter.colors")) {
             msg = msg.replaceAll("&([0-9a-fA-F])", "&&$1");
@@ -78,6 +74,8 @@ public class ChatterPlayerListener implements Listener {
         if(!player.hasPermission("chatter.decoration")) {
             msg = msg.replaceAll("&([k-oK-ORr])", "&&$1");
         }
+        
+        if (!Chatter.textwrapping && !Chatter.factionisEnabled) return;
 
         Set<Player> players = event.getRecipients();
         String message = Chatter.format.parseChat(player, msg) + " ";
@@ -85,10 +83,14 @@ public class ChatterPlayerListener implements Listener {
         if (Chatter.factionisEnabled && message.contains("+f")) {
             // If factions is enabled, and there is a +f in the message, change it to be per player.
             for (Player playertemp : players) {
-                String[] messages = BetterChatWrapper.wrapText(Chatter.format.parsePerPlayer(player, message, playertemp) + " ") ;
-                for(String tempMessage : messages) {
-                    playertemp.sendMessage(tempMessage);
-                }
+            	if(Chatter.textwrapping) {
+	                String[] messages = BetterChatWrapper.wrapText(Chatter.format.parsePerPlayer(player, message, playertemp) + " ") ;
+	                for(String tempMessage : messages) {
+	                    playertemp.sendMessage(tempMessage);
+	                }
+            	} else {
+            		playertemp.sendMessage(Chatter.format.parsePerPlayer(player, message, playertemp));
+            	}
             }
         } else {
             // If it's just as normal, do it just as normal

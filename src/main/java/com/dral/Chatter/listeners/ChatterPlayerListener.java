@@ -184,15 +184,21 @@ public class ChatterPlayerListener implements Listener {
 
         if (message.toLowerCase().startsWith("/me ")) {
             String s = message.substring(message.indexOf(' ')).trim();
-            String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, s, Chatter.meFormat) + " ");
-
-            for (String messageThing : messages) {
-                Chatter.server.broadcastMessage(messageThing);
-            }
-            if (Chatter.craftircenabled) {
-                Chatter.irc.relaymsg("action", s, ChatColor.stripColor(player.getDisplayName()));
-            }
-            event.setCancelled(true);
+        	if(Chatter.textwrapping) {
+	            String[] messages = BetterChatWrapper.wrapText(Chatter.format.parseChat(player, s, Chatter.meFormat) + " ");
+	
+	            for (String messageThing : messages) {
+	                Chatter.server.broadcastMessage(messageThing);
+	            }
+	            if (Chatter.craftircenabled) {
+	                Chatter.irc.relaymsg("action", s, ChatColor.stripColor(player.getDisplayName()));
+	            }
+	            event.setCancelled(true);
+        	}
+        	else {
+        		message = Chatter.format.parseChat(player, s, Chatter.meFormat);
+        		event.setMessage("/me " + message);
+        	}
         }
     }
 }

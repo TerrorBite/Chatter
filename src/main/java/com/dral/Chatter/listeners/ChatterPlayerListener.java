@@ -76,7 +76,7 @@ public class ChatterPlayerListener implements Listener {
         }
         
         if (!Chatter.textwrapping && !Chatter.factionisEnabled) {
-        	System.out.println(Chatter.stripColor ? ChatColor.stripColor(format) : format);
+        	//System.out.println(Chatter.stripColor ? ChatColor.stripColor(format) : format);
         	return;
         }
 
